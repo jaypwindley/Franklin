@@ -1,0 +1,20 @@
+JSON RPC API
+
+Bibliographic
+
+auth_create( MARC21 ) > ctl_num
+	Create a new authority record and return its control number.
+auth_retrieve( search_terms, limit=1, src={LC,local} ) > [MARC21]
+	Retrieve authority records matching search from the given source.
+auth_update( MARC21 ) > status
+	Update the given authority record.
+auth_delete( clt_num ) > status
+	Delete the given bibliographic record.
+bib_create( MARC21 ) > ctl_num
+	Create a new bibliographic record and return its control number.
+bib_retrieve( search_terms, limit=1, src={LC,local} ) > [MARC21]
+	Retrieve bibligraphic records matching search from the given source.
+bib_update( MARC21 ) > status
+	Update the given bibliographic record.
+bib_delete( ctl_num ) > status
+	Delete the given bibliographic record.

@@ -1,0 +1,25 @@
+BIBLIOGRAPHIC
+
+The Bibliographic module manages lists of authors and works irrespective of holdings, and LC subject classifications.  Interchange is via MARC21 Bibliographic records (for works) and MARC21 Authority records (for authors and subject classifications).
+
+Patron-facing services include the searchable catalogue of authors and works.
+
+Staff services include basic bibliography maintenance: accession and withdrawal of titles.
+
+
+HOLDINGS
+
+The Holdings module manages physical items in the collection.  For each item it records its parent bibliographic information, physical format, condition, retention, and location.
+
+Patron-facing services include item location and disposition.
+
+Staff services include patron-facing services for internal use as well as provisions for workflow management.
+
+
+CIRCULATION
+
+The Circulation module manages the movement of materials in and out of the library in the custody of patrons.  It maintains a list of patrons, their contact information, their roles and privileges, and sets policy for circulation of item types and patron types.
+
+Patron-facing services include patron account management and circulation activities such as charge/discharge, holds, and requests.
+
+Staff services include inventory management and patron-facing workflow.

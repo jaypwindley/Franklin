@@ -1,0 +1,73 @@
+#!/bin/bash
+# ***********************************************************************
+#  File:              TAG( lcquery )
+#  Description:       Query the Library of Congress catalog
+#  Author:            jwindley@xmission <jwindley>
+#  Created:           Thu Jan 23 21:15:42 2014
+#  Copyright:         (c) 2014 Jay Windley
+#                     All rights reserved.
+# ***********************************************************************
+
+LCDB_URL="http://lx2.loc.gov:210/LCDB"
+LCDB_OP="searchRetrieve"
+LCDB_VER="1.1"
+LCDB_MAX=3
+LCDB_SCHEMA="marcxml"
+
+query_string=${1}
+
+if [ -z "$query_string" ]; then
+    cat <<EOF | less
+usage: lcquery <CQL-query-string>
+
+Execute a CQL query string against the Library of Congress
+bibliographic databse.  Returns a list of records in MARCXML
+formate.  Query strings include:
+
+Dublin Core Index
+    dc.author
+    dc.creator
+    dc.date
+    dc.description
+    dc.publisher
+    dc.resourceType
+    dc.resourceIdentifier
+    dc.source
+    dc.subject
+    dc.title
+
+Bath Index
+    bath.any
+    bath.author
+    bath.conferenceName
+    bath.corporateAuthor
+    bath.corporateName
+    bath.genreForm
+    bath.geographicName
+    bath.isbn
+    bath.issn
+    bath.keyTitle
+    bath.lcCallNumber
+    bath.lccn
+    bath.name
+    bath.note
+    bath.personalAuthor
+    bath.personalName
+    bath.publisher
+    bath.publisherNumber
+    bath.seriesTitle
+    bath.standardIdentifier
+    bath.subject
+    bath.title
+    bath.topicalSubject
+    bath.uniformTitle
+EOF
+    exit 0
+fi
+
+curl -s -G -d operation=${LCDB_OP}        \
+           -d version=${LCDB_VER}         \
+	   -d maximumRecords=${LCDB_MAX}  \
+           -d recordSchema=${LCDB_SCHEMA} \
+           --data-urlencode "query=${query_string}" \
+        ${LCDB_URL}

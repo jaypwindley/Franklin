@@ -1,0 +1,1 @@
+*/10 * * * * cd $HOME/Dropbox/Projects/Franklin/py/batch; ./xml_breakout.py --del ../../spool/XML/*.xml

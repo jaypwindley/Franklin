@@ -1,0 +1,15 @@
+_X_ Scan ISBN barcode, LC search, option to store bibliographic record.
+
+_X_ LC search by title, LCCN, author, BATH-related fields, option to store bibliographic record.
+
+___ Create anonymous Item with lots of batch defaults.
+
+___ Create RPC service framework.
+
+___ Do bib search, select bib record, link Item to bib record.
+
+___ Scan Item barcode, print spine labels for item.
+
+___ Batch location update: set location, scan items.
+
+Create MARC21 bibliography records from scratch.  Emacs help?  Templates?

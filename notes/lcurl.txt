@@ -1,0 +1,1 @@
+http://lx2.loc.gov:210/LCDB?operation=searchRetrieve&version=1.1&query=2012935506&maximumRecords=4&recordSchema=marcxml

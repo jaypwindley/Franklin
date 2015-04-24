@@ -1,0 +1,294 @@
+--- MULTIPART HOLDINGS
+	>control number: bibliographic unit to which this refers
+	retention policy, one of:
+	  	all: all parts retained
+	  	interval: older issues discarded
+	  	current: current part only retained
+        reception policy, one of:
+	  		ongoing subscription: issues arrive automatically
+			ended subscription: no more issues expected
+			ad hoc: issues purchased individually
+	compressed holdings: statement of holdings when items are not individually controlled
+	publication frequency: issue rate per time interval
+		     # Can be 0.5 to indicate biennal, bimonthly,
+		     # biweekly 
+	publication interval: time denominator, one of: year, month, week, day, null
+		     # null indicates uncodable interval, frequency=1
+		     # means continuously updated (e.g., web page).
+		     # frequency=0 means irregular updates
+	 	     # Annual                       1/yr
+		     # Bimonthly                    0.5/mo
+		     # Continuously updated         1/null
+		     # Semiweekly                   2/wk
+		     # Monthly                      1/mo
+		     # Daily                        1/day
+		     # Quarterly                    4/yr
+		     # Biweekly                     0.5/wk
+		     # Semimonthly                  2/mo
+		     # Semiannual                   2/yr
+		     # Biennial                     0.5/yr
+		     # Weekly                       1/wk
+		     # Completely irregular         0/null
+	 unnumerated parts, any of:
+		     supplement
+		     index
+		     other
+	 enumeration captions: labels for levels
+		[ 4 levels ]
+		# Enumerations typically go: volume, part, issue/number,
+		# section
+	 enumeration division: how many units per higher enumeration
+		[ 4 levels ]
+	 chronology captions
+		[ 3 levels ]
+		# Chronologies can be: year, month
+		#                      year, month, day
+		#                      year, season
+		#		       year, month, week
+
+--- LOCATION
+	*id: user-selected ID
+	name: human-readable name
+	description: detailed description
+	street address: physical street address
+	map coordinates: GPS or map coordinates
+	>default access: ID of default access policy
+
+--- SUBLOCATION
+	*id: user-selected ID
+	>location_id: parent location ID
+	name: human-readable name
+	description: detailed description
+	>default access: ID of default access, overrides location
+
+--- SHELVING LOCATION
+	*id: user-selected ID
+	>sublocation_id: parent sublocation ID
+	name: human-readable name
+	description: detailed description
+	scheme, one of:
+		classification: by call-number (i.e., subject classification)
+		serial: by an imposed serial number
+		author: by author
+	 	title: by title
+		display: by height, open, or otherwise
+	 	none: no shelving system
+	>default access: ID of default access, overrides sublocation
+
+
+--- ACCESS POLICY (locations and sublocations)
+	one of:
+		none: staff access only
+		restricted: requires staff approval or supervision
+		open: location is publicly accessible to patrons
+		
+--- ELECTRONIC LOCATION
+	*id: autoincrement
+	host: computer host name
+	port: computer port address
+	scheme: data access scheme, for URI
+	path: path element of URI
+	login:        access
+	password:     credentials (encrypted)
+	additional arguments: URI arguments
+	os type: hosting computer OS type
+	compression: compression method, if any
+	file size: payload size in octets
+	electronic format type: text description of format
+
+--- ITEM
+	*id: item ID
+  	copy number: serial copy number for multiple items
+	>shelving_location_id
+	>electronic_location_id
+	!!! Much of this is also represented in the bibliographic data.
+	content type: the form of communication that conveys the content, one of:
+		cartographic: geographic information
+		electronic resource: machine-interpretable instruction
+		notated performance: dance, music, etc. in written form
+		sounds: audible content (language independent)
+		spoken language: audible content (language)
+		still image: photos, paintings, etc.
+		tactile: Braille, anything meant to be touched
+		form: physical form, such as sculpture
+		text: readable text, any language
+		visual: non-text, non-image (e.g., preserved specimen)
+		moving image: motion pictures, digital or otherwise
+		other
+	media type:  suggests the intermediation device required to present the content, one of:
+		audio: sound recording, e.g., music CD, phonograph, computer sound file
+		electronic: computer, i.e., to run a program
+		microform: microreproduced versions of other media
+		microscopic: e.g., specimens on microscope slides
+		projected: transparent forms meant to allow light transmission
+		stereographic: anaglyphs etc. requiring a viewer
+		unmediated: immediately perceptible without equipment
+		video: moving pictures
+	carrier category/subcategory: see below
+	carrier details: parameters of the carrier, specific to its type (e.g., bitrate of MP3)
+	access restriction
+       	access restriction, such as:
+        	confidential
+	      	classified
+	      	official use only
+	      	subscriber access only
+		access authority: the entity responsible for setting and enforcing access policy
+		physical restriction, any of:
+			 protective clothing
+			 written permission
+			 fragile
+			 by appointment
+		
+	cost: cost to replace
+	cost currency: currency unit of cost
+	serial detail
+	       >multipart holdings id
+	       item title: serial part title (e.g., year-end index)
+	       item enumeration: this enumeration against caption
+	       item chronology: this chronology against caption
+
+### The difference between a cartridge and a cassette is identically the difference between an 8-track audio tape and a cassette audio tape.  Catridges may be operated only in one direction, but operate continuously; cassettes must have a separate rewind operation to prepare them again for playback.
+
+--- ITEM CARRIER CATEGORY / SUBCATEGORY (by content type and/or media)
+	cartographic
+		celestial globe
+		earth globe
+ 		planetary globe
+ 		atlas
+		diagram
+		map
+		model
+ 		profile?
+		remote-sensing image: satellite photography
+		section?
+		view?
+	electronic resource
+		chip cartridge: USB stick, etc.
+		computer optical disc cartridge
+		magnetic disk: fixed or removable
+		magneto-optical disc
+		optical disc: CD, CD-ROM, DVD, DVD-ROM, BluRay
+		remote: accessible via URL, public or private
+		tape cartridge
+		tape cassette
+		tape reel
+	microform
+		aperture card
+		microfiche
+		microfiche cassette
+		microfilm cartridge
+		microfilm cassette
+		microfilm reel
+		microopaque
+	microscopic
+		slide
+		other
+	moving picture
+		film cartridge
+		film cassette
+		film reel
+		videocartridge
+		videocassette
+		videodisc
+		videoreel 
+	nonprojected visual
+		chart
+		collage
+		drawing
+		flash card
+		painting
+		photomechanical print
+		photonegative
+		photoprint
+		picture
+		print
+		technical drawing
+	notated performance
+		music
+		dance
+		other
+	projected graphic
+		filmslip
+		filmstrip cartridge
+		filmstrip roll
+		other filmstrip type
+		slide
+		transparency 
+	sound, spoken language
+		cylinder
+		roll
+		sound cartridge
+		sound cassette
+		sound disc
+		sound-tape reel
+		sound-track film
+		wire recording
+	stereograph
+		card
+		disc
+		other
+	tactile
+		braille emboss
+		moon emboss
+		tactile, with no writing system 
+		other
+	text / unmediated
+		codex
+		roll
+		sheet
+		volume
+		looseleaf binder
+	unspecified
+
+
+--- ITEM NOTE
+     >*item id: parent item
+     *type: see below
+     *timestamp: datetime note was applied
+     agent: person adding note
+     text: written detail
+
+--- ITEM NOTE TYPE
+	unspecified: free-form text entry
+	custodial history: who had the item previously
+	type/format notes: anything not covered in formal fields
+	identifying markings: visual marks to identify item
+	original presentation: how the item material came about
+	binding / container notes: comments about how material is contained
+	action: see below
+
+--- ITEM ACTION TYPE
+     *id, one of
+     	unspecified: free-form text entry
+	accede: obtain the item intially
+     	inspect: examine item generally
+     	review: examine item for policy change
+     	repair: repair or restore item
+     	withdraw: withdraw item from collection
+     	destroy: item destroyed accidentally or intentionally
+     	transfer: move item within collection
+       	appraise: determine monetary value
+       	digitize: convert to digital form
+	reproduce: make a physical copy
+
+--- ITEM ACTION NOTE DETAIL
+     >*item note id: parent item note
+     *action type: item action type (above)
+     *timestamp: datetime of action completion
+     agent: person who performed action
+     authority: authority by which action occurred
+     		policy
+		direction
+		staff
+     method: technique or method used (type specific)
+     	     automated
+	     online
+	     manual
+	     visual
+     outcome: disposition of action (type specific)
+     	      pending
+	      deferred
+	      blocked
+	      canceled
+	      completed
+	      
