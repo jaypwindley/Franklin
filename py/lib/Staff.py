@@ -11,7 +11,7 @@
 """
 
 import sys
-sys.path.appen( '../lib' )\
+sys.path.append( '../lib' )
 from IND import IND
 
 #***********************************************************************
