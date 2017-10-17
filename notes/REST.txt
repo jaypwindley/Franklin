@@ -1,0 +1,36 @@
+GENERAL
+
+The base URL is https://<server>:8112/api/<version>
+where <server> is the name or IP address of the API server and <version> is the API version, currently 1.
+
+Authentication is Basic.
+
+BIBLIOGRAPHIC MODULE
+
+URL /bib/
+METHOD PUT
+
+URL /bib/id/<bib-id>
+METHOD GET
+Accept: x-application/marc21; x-application/marcz392
+
+404 No such record
+
+METHOD PUT
+METHOD PATCH
+METHOD DELETE
+
+URL /bib/search?<search-args>
+Accept: mime/multipart
+
+404 No matches
+
+URL /author/id/<author-id>
+URL /author/search?<search-args>
+URL /subject/id/<subject-id>
+URL /subject/search?<search-args>
+
+
+HOLDINGS MODULE
+
+URL /item/
