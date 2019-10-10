@@ -27,7 +27,7 @@ RPC = {
 CREDENTIALS = {
     'database': {
         'Franklin': {
-            'host': 'absinthe',
+            'host': 'kibbles',
             'user': 'biblio',
             'pass': 'silence_dogood'
             },
