@@ -35,14 +35,14 @@ class data_bib( mysql_driver ):
         # Attempt to connect to database.
         conn_data['db'] = 'Franklin'
         mysql_driver.__init__( self, conn_data )
-        
+
 
     #-------------------------------------------------------------------
     # Return a view-only MARC record associated with the given control
     # number, or None if no such record exists in the data store.
     #
     def view( self, ctl_num ):
-        rec = MARC_record()        
+        rec = MARC_record()
         rec.leader = self.get_leader( ctl_num )
         if rec.leader is None: return None
         self.build_record( rec, ctl_num )
@@ -78,7 +78,7 @@ class data_bib( mysql_driver ):
 
         self.commit()
 
-    
+
     #-------------------------------------------------------------------
     # Delete from the data store the MARC record associated with the
     # given control number.  Returns True on success or False on
@@ -120,7 +120,7 @@ class data_bib( mysql_driver ):
                                    pos + 1,
                                    f[ 1 ] )
         self.commit()
-        
+
 
 
     #-------------------------------------------------------------------
@@ -277,7 +277,7 @@ class data_bib( mysql_driver ):
                               tag     = tag,
                               val     = val ) )
 
-    def update_control_field( self, ctl_num, tag, val ):        
+    def update_control_field( self, ctl_num, tag, val ):
         self.execute( """UPDATE MARC_Control_Fields
                          SET `val` = '{val}'
                          WHERE     `ctl_num` = '{ctl_num}'
@@ -363,16 +363,13 @@ class data_bib( mysql_driver ):
                            '{code}',
                            '{pos}',
                            '{val}'
-                         );""".
-                      format( ctl_num = ctl_num,
-                              tag     = tag,
-                              seq     = seq,
-                              code    = code,
-                              pos     = pos,
-                              val     = self.esc( val.encode( 'utf-8', 'ignore' )
-                                                  )
-                              )
-                      )
+                         );""".format( ctl_num = ctl_num,
+                                       tag     = tag,
+                                       seq     = seq,
+                                       code    = code,
+                                       pos     = pos,
+                                       val     = self.esc( val ) ) )
+
 
     def update_field( self, ctl_num, tag, seq, code, pos, val ):
         self.execute( """UPDATE MARC_Fields
@@ -436,7 +433,7 @@ class data_bib( mysql_driver ):
                     code = 'a' ) )
 
     #-------------------------------------------------------------------
-    # 
+    #
     def match_keywords( self, key_list, domain_list, limit ):
         limit_phrase = ''
         if limit > 0: limit_phrase = ' LIMIT {}'.format( limit )
@@ -465,5 +462,3 @@ class data_bib( mysql_driver ):
             limit_phrase   = limit_phrase )
 
         return [ tuple( row ) for row in self.row_array( SQL ) ]
-
-
