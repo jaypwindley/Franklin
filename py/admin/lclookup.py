@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import re
 import sys
@@ -11,7 +11,7 @@ import SRU
 import MARC_XML
 from data_bib import data_bib
 
-    
+
 db_name = 'Franklin'
 db = data_bib( config.CREDENTIALS['database'][db_name] )
 
@@ -34,17 +34,18 @@ def save_record( rec, db ):
     try:
         db.add( rec )
     except mdb.IntegrityError:
-        print 'Already in catalog'
+        print( 'Already in catalog' )
     except mdb.ProgrammingError as e:
-        print 'SQL_error: {}'.format( e )
+        print( 'SQL_error: {}'.format( e ) )
 
 
 def get_prompted_input( prompt ):
     sys.stdout.write( prompt )
+    sys.stdout.flush()
     try:
         val = sys.stdin.readline().strip()
     except KeyboardInterrupt:
-        print
+        print()
         sys.exit( 0 )
     return val
 
@@ -54,15 +55,15 @@ def LC_search( args_dict ):
     query.max_recs = 25;
     XML_data = query.submit()
     records = XML_parser.parse_string( XML_data )
-    return records 
+    return records
 
 
 def select_record( records, prompt_detail ):
-    for i in xrange( len( records ) ):
-        print "{:3} {}".format(
+    for i in range( len( records ) ):
+        print( "{:3} {}".format(
             i,
-            records[ i ].cite().encode( 'utf-8', 'ignore' )
-            )
+            records[ i ].cite()
+            ) )
     cmd = get_prompted_input(  'Number of record to store' + prompt_detail )
     if index_regex.match( cmd ):
         try:
@@ -71,10 +72,10 @@ def select_record( records, prompt_detail ):
             pass
         return ''
     elif marc_regex.match( cmd ):
-        print records[ int( cmd[ 1: ] ) ]
-    else:        
+        print( records[ int( cmd[ 1: ] ) ] )
+    else:
         return cmd
-    
+
 
 try:
     mode = sys.argv[ 1 ]
@@ -91,13 +92,13 @@ if mode == 'scan':
 
         records = LC_search( { 'ISBN' : ISBN } )
         if records is None or len( records ) == 0:
-            print '*** not found ***'
+            print( '*** not found ***' )
             ISBN = ''
             continue
 
         # If only one record returned, live dangerously and store it.
         if len( records ) == 1:
-            print '>>> storing record'
+            print( '>>> storing record' )
             save_record( records[ 0 ], db )
             ISBN = ''
             continue
@@ -113,13 +114,12 @@ else:
             key = SRU_keys[ type ]
         except KeyError:
             continue
-        
+
         search = get_prompted_input( key + ' search: ' )
-        
+
         records = LC_search( { key : search } )
         if records is None or len( records ) == 0:
-            print '*** not found ***'
+            print( '*** not found ***' )
             continue
 
         select_record( records, ' or Enter for none: ' )
-        
