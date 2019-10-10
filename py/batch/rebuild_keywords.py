@@ -17,6 +17,7 @@ SPLIT_REGEX = re.compile( '[ ~\,\-]' )
 DELETE_REGEXES = map( re.compile, [
     "'\d{1,2}(/\d{1,2})?$",       # short digit strings
     "['\:\,\.\/\[\]\(\)]{1,2}",   # remove lots of punctuations
+    '[\"]{1,2}',                  # ...and more punctuation
     "^[a-z0-9]{1}$",              # single alphanumeric characters
     ] )
 
