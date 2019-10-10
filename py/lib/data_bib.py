@@ -108,18 +108,19 @@ class data_bib( mysql_driver ):
                                        tag,
                                        rec.ctl_fields[ tag ] )
         for t in rec.tags:
-            self.insert_indicators( rec.ctl_num(),
-                                    t.tag,
-                                    t.seq,
-                                    t.ind )
-            for pos, f in enumerate( t.fields.fields ):
-                self.insert_field( rec.ctl_num(),
-                                   t.tag,
-                                   t.seq,
-                                   f[ 0 ],
-                                   pos + 1,
-                                   f[ 1 ] )
-        self.commit()
+            if t.tag[ 0 ] != '9':
+                self.insert_indicators( rec.ctl_num(),
+                                        t.tag,
+                                        t.seq,
+                                        t.ind )
+                for pos, f in enumerate( t.fields.fields ):
+                    self.insert_field( rec.ctl_num(),
+                                       t.tag,
+                                       t.seq,
+                                       f[ 0 ],
+                                       pos + 1,
+                                       f[ 1 ] )
+                self.commit()
 
 
 
