@@ -28,7 +28,9 @@ class mysql_driver( object ):
         self.db = mdb.connect( conn_data['host'],
                                conn_data['user'],
                                conn_data['pass'],
-                               conn_data['db'] )
+                               conn_data['db'],
+                               charset = 'utf8',
+                               use_unicode = True )
 
     #-------------------------------------------------------------------
     # Return a single value that is the single row and single column
@@ -42,7 +44,7 @@ class mysql_driver( object ):
         if data is None: return None
         return data[0]
 
-    
+
     #-------------------------------------------------------------------
     # Return an array of database rows that result from the given
     # query.  Queries that return no rows return an empty list.
@@ -96,13 +98,10 @@ class mysql_driver( object ):
                 table = table,
                 indices = ', '.join( map( self.esc, indices ) ),
                 values = ', '.join( map(
-                        lambda x:
-                            "'{}'".format( self.esc( x ) ),
-                        values ) )
-                )
-            )
+                    lambda x:
+                        "'{}'".format( self.esc( x ) ),
+                    values ) ) ) )
         self.commit()
-
 
 
     #-------------------------------------------------------------------
@@ -124,8 +123,8 @@ class mysql_driver( object ):
                 val = dict[ key ] ) )
         self.commit()
 
-            
-    
+
+
     #-------------------------------------------------------------------
     # Execute a query.  Results are stored in the cursor object
     # associated with the connection object.
@@ -141,13 +140,13 @@ class mysql_driver( object ):
     def commit( self ):
         self.db.commit()
 
-            
+
     # ------------------------------------------------------------------
     # Escape the string for use as a single-quoted value in an INSERT
     # statement.
     #
     def esc( self, s ):
-        if isinstance( s, basestring ):
+        if isinstance( s, str ):
             return s.replace( "'", "\\'" )
         else:
             return s
