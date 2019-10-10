@@ -1,4 +1,6 @@
-CREATE DATABASE IF NOT EXISTS Franklin;
+CREATE DATABASE IF NOT EXISTS Franklin
+       CHARACTER SET utf8mb4
+       COLLATE utf8mb4_unicode_ci;
 USE Franklin;
 
 
@@ -50,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `Item` (
    Media_Type_ID           CHAR(8)           DEFAULT 'DIRECT',
    Carrier_Type_ID         CHAR(8)           DEFAULT 'CODEX',
 
-   
+
    INDEX `bib_item` ( `ID`, `ctl_num` ),
 
    FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
@@ -80,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `Item` (
       ON DELETE SET NULL
       ON UPDATE CASCADE
 
-   
+
 ) ENGINE = `InnoDB`;
 
 
@@ -108,7 +110,7 @@ INSERT INTO `Item_Note_Type` VALUES
    ( 'ACTION', 'Action required',  'An action must be taken on this item' );
 
 
-   
+
 -- ---------------------------------------------------------------------
 -- For notes of type ACTION, a list of predetermined actions to take.
 -- User-extensible.
@@ -157,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `Item_Note` (
    FOREIGN KEY ( `agent` ) REFERENCES `Staff` ( `login` )
      ON DELETE SET NULL
      ON UPDATE CASCADE
-     
+
 ) ENGINE = `InnoDB`;
 
 
@@ -181,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `Item_Action_Note` (
      REFERENCES `Item_Action_Type` ( `ID` )
      ON DELETE CASCADE
      ON UPDATE CASCADE
-     
+
 ) ENGINE = `InnoDB`;
 
 
@@ -199,17 +201,17 @@ CREATE TABLE IF NOT EXISTS `Item_Action_Note_Detail` (
   agent                VARCHAR(32)               DEFAULT 'SYSTEM',
 
   note                 VARCHAR(256),
-  
+
   authority            ENUM (
                             'Policy',      -- automatic, by virtue of policy
                             'Direction',   -- responsible staff specifically directed
                             'Staff'        -- staff's own recognizance
                             )
-                                                 DEFAULT 'Staff',                           
+                                                 DEFAULT 'Staff',
   method               ENUM (
                             'Automated',   -- unattended automatic operation
                             'Online',      -- external computer access
-                            'Manual',      -- physical handling of material                         
+                            'Manual',      -- physical handling of material
                             'Visual',      -- visual examination
                             'Delegated',   -- external third-party operation
                             'Other'
@@ -231,5 +233,5 @@ CREATE TABLE IF NOT EXISTS `Item_Action_Note_Detail` (
   FOREIGN KEY ( `agent` ) REFERENCES `Staff` ( `login` )
      ON DELETE SET NULL
      ON UPDATE CASCADE
-     
+
 ) ENGINE = `InnoDB`;

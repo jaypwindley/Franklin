@@ -1,4 +1,6 @@
-CREATE DATABASE IF NOT EXISTS Franklin;
+CREATE DATABASE IF NOT EXISTS Franklin
+       CHARACTER SET utf8mb4
+       COLLATE utf8mb4_unicode_ci;
 USE Franklin;
 
 -- =====================================================================
@@ -36,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `Staff_Department` (
    FOREIGN KEY ( `Location_ID` ) REFERENCES `Location` ( `ID` )
       ON DELETE SET NULL
       ON UPDATE CASCADE
-      
+
 ) ENGINE = `InnoDB`;
 
 INSERT INTO `Staff_Department` VALUES
@@ -65,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `Staff` (
 
 INSERT INTO `Staff` VALUES
    ( 'SYSTEM', 'Franklin', 'System', 'Franklin System', 'GEN'  );
-  
+
 
 
 -- ---------------------------------------------------------------------

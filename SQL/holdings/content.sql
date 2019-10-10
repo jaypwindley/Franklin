@@ -1,4 +1,6 @@
-CREATE DATABASE IF NOT EXISTS Franklin;
+CREATE DATABASE IF NOT EXISTS Franklin
+       CHARACTER SET utf8mb4
+       COLLATE utf8mb4_unicode_ci;
 USE Franklin;
 
 -- =====================================================================
@@ -36,7 +38,7 @@ INSERT INTO `Content_Type` VALUES
    ( 'OTHER',   'other',               'Unknown or undefined content' );
 
 
-  
+
 -- ---------------------------------------------------------------------
 -- Suggests whether some kind of mediation is necessary to present to
 -- the content to a patron.  The default is DIRECT which is simply
@@ -179,4 +181,3 @@ INSERT INTO `Carrier_Type` VALUES
    ( 'TEXT',    NULL,       'SHEET',    'sheet',               'Single sheet' ),
    ( 'TEXT',    NULL,       'VOLUME',   'volume',              'Rebound volume' ),
    ( 'TEXT',    NULL,       'BINDER',   'binder',              'Loose-leaf binder' );
-

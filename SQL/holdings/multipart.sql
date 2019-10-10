@@ -1,4 +1,6 @@
-CREATE DATABASE IF NOT EXISTS Franklin;
+CREATE DATABASE IF NOT EXISTS Franklin
+       CHARACTER SET utf8mb4
+       COLLATE utf8mb4_unicode_ci;
 USE Franklin;
 
 -- =====================================================================
@@ -33,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `Multipart_Profile` (
 
    -- Publication intervals.
    --    frequency: issue rate in each per_interval
-   --       can be 0.5 to indicate biennoal, bimonthly, biweekly 
+   --       can be 0.5 to indicate biennoal, bimonthly, biweekly
    --    per_interval: time denominator, one of: year, month, week, day, null
    --       null indicates uncodable interval,
    --
@@ -87,5 +89,3 @@ CREATE TABLE IF NOT EXISTS `Multipart_Profile` (
       ON UPDATE CASCADE
 
 ) ENGINE = `InnoDB`;
-
-

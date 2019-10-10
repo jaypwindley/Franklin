@@ -1,4 +1,6 @@
-CREATE DATABASE IF NOT EXISTS Franklin;
+CREATE DATABASE IF NOT EXISTS Franklin
+       CHARACTER SET utf8mb4
+       COLLATE utf8mb4_unicode_ci;
 USE Franklin;
 
 -- --------------------------------------------------------------------
@@ -77,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `Location` (
       REFERENCES `Location_Access_Policy` ( `ID` )
       ON DELETE RESTRICT
       ON UPDATE CASCADE
-	   
+
 ) ENGINE = `InnoDB`;
 
 
@@ -93,16 +95,16 @@ CREATE TABLE IF NOT EXISTS `Sublocation` (
 
    -- Default access for this sublocation.  Shelving may override.
    Location_Access_Policy_ID CHAR,
-   
+
    FOREIGN KEY ( `Location_ID` ) REFERENCES `Location` ( `ID` )
       ON DELETE RESTRICT
       ON UPDATE CASCADE,
-      
+
    FOREIGN KEY ( `Location_Access_Policy_ID` )
       REFERENCES `Location_Access_Policy` ( `ID` )
       ON DELETE SET NULL
       ON UPDATE CASCADE
-      
+
 ) ENGINE = `InnoDB`;
 
 
@@ -126,7 +128,7 @@ INSERT INTO `Shelving_Scheme` VALUES
    ( 'NONE',    'None',              'No shelving scheme' );
 
 
-  
+
 -- ---------------------------------------------------------------------
 -- A shelving location within a continguous physical space (sublocation).
 --
@@ -135,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `Shelving_Location` (
    Sublocation_ID             CHAR(8),
    name                       VARCHAR(32),
    description                VARCHAR(128),
-   
+
    Shelving_Scheme_ID         CHAR(8),
    Location_Access_Policy_ID  CHAR,
 
@@ -171,16 +173,16 @@ CREATE TABLE IF NOT EXISTS `Electronic_Location` (
    login         VARCHAR(16),
    password      VARCHAR(128),
    args          VARCHAR(256)  DEFAULT '',
-   
+
    os_type       ENUM (
                       'MacOS',
                       'Linux',
                       'Windows',
                       'Other'
                    )           DEFAULT 'Other',
-                   
+
    compression   VARCHAR(64)   DEFAULT 'none',
    file_size     INTEGER(16),
    mime_format   VARCHAR(64)   DEFAULT 'text/plain'
-   
+
 ) ENGINE = `InnoDB`;
