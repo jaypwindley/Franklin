@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 # -----------------------------------------------------------------------
 #  File:              TAG( SRU.py )
@@ -12,7 +12,7 @@
 
 import re
 import urllib
-import httplib
+import http.client
 
 import config
 
@@ -92,7 +92,7 @@ class Query( object ):
             'maximumRecords' : self.max_recs,
             'query'          : self.terms_str()
             }
-        return urllib.urlencode( CGI )
+        return urllib.parse.urlencode( CGI )
 
 
     #-------------------------------------------------------------------
@@ -126,9 +126,9 @@ class Query( object ):
     #
     def submit( self ):
         """Submit an SRU request and return its answer"""
-        conn = httplib.HTTPConnection( host    = self.host,
-                                       port    = self.port,
-                                       timeout = self.timeout )
+        conn = http.client.HTTPConnection( host    = self.host,
+                                           port    = self.port,
+                                           timeout = self.timeout )
         conn.request( 'GET', '{}?{}'.format( self.path, self.CGI_args() ) )
         answer = conn.getresponse()
         if answer.status is not 200:
@@ -136,7 +136,7 @@ class Query( object ):
         data = answer.read()
         conn.close()
         return data
-                      
+
 
     #-------------------------------------------------------------------
     # Return the query as a full URL with CGI arguments properly
@@ -148,7 +148,7 @@ class Query( object ):
             port = self.port,
             path = self.path,
             args = self.CGI_args()
-            )    
+            )
 
 
 '''
@@ -159,7 +159,7 @@ Number searches (ISBN, ISSN, LCCN, etc.):
        Do not include hyphens in ISBN or LCCN search terms.
        LCCN search terms should be in normalized format (i.e., include
            any prefix, spaces, or zero fill).  For example, LCCN 91-13
-           should be "91000013" in the search term.  
+           should be "91000013" in the search term.
 '''
 
 #-----------------------------------------------------------------------
@@ -199,11 +199,10 @@ def normalize_LCCN( LCCN ):
         if len( parts[ 0 ] ) == 8:
             return LCCN               # already canonical form
         else:
-            year   = int( LCCN[:2] )  # assume dash-less entry 
+            year   = int( LCCN[:2] )  # assume dash-less entry
             serial = int( LCCN[2:] )
     else:
         year   = int( parts[ 0 ] )
         serial = int( parts[ 1 ] )
 
     return '%02d%06d' % ( year, serial )
-    
