@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS MARC_Indicators (
        CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
        		  ON DELETE CASCADE
 		  ON UPDATE CASCADE
-		  
+
 ) ENGINE = 'InnoDB';
 
 
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS MARC_Fields (
        CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
        		  ON DELETE CASCADE
 		  ON UPDATE CASCADE
-		  
+
 ) ENGINE = 'InnoDB';
 
 
@@ -109,10 +109,10 @@ CREATE TABLE IF NOT EXISTS Bib_Keywords (
        ctl_num	    CHAR(32)		NOT NULL,
        domain       CHAR(1)                        DEFAULT '',
        keyword      VARCHAR(256)        NOT NULL,
-       offset       SMALLINT(2)                    DEFAULT 0
+       offset       SMALLINT(2)                    DEFAULT 0,
 
        UNIQUE ( `ctl_num`, `domain`, `keyword` ),
-       FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
+       CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
        	       ON DELETE CASCADE
 	       ON UPDATE CASCADE
 ) ENGINE = 'InnoDB';
