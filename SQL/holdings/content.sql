@@ -45,9 +45,9 @@ INSERT INTO `Content_Type` VALUES
 -- looking at the medium to recieve the information.
 --
 CREATE TABLE IF NOT EXISTS `Media_Type` (
-   ID CHAR(8) PRIMARY KEY NOT NULL,
-   name VARCHAR(32),
-   description VARCHAR(128)
+   ID             CHAR(8)          PRIMARY KEY NOT NULL,
+   name           VARCHAR(32),
+   description    VARCHAR(128)
 ) ENGINE = `InnoDB`;
 
 INSERT INTO `Media_Type` VALUES
