@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import re
 import sys
@@ -12,18 +12,18 @@ from data_bib import data_bib
 db_name = 'Franklin'
 db = data_bib( config.CREDENTIALS['database'][db_name] )
 
-SPLIT_REGEX = re.compile( '[ ~\,\-]' )
+SPLIT_REGEX = re.compile( r'[ ~\,\-]' )
 
-DELETE_REGEXES = map( re.compile, [
-    "'\d{1,2}(/\d{1,2})?$",       # short digit strings
-    "['\:\,\.\/\[\]\(\)]{1,2}",   # remove lots of punctuations
-    '[\"]{1,2}',                  # ...and more punctuation
-    "^[a-z0-9]{1}$",              # single alphanumeric characters
-    ] )
+DELETE_REGEXES = list( map( re.compile, [
+    r'\d{1,2}(/\d{1,2})?$',        # short digit strings
+    r"['\:\,\.\/\[\]\(\)]+",       # remove lots of punctuations
+    r'[\"]+',                      # ...and more punctuation
+    r'^[a-z0-9]{1}$',              # single alphanumeric characters
+    ] ) )
 
 DELETE_LITERALS = [
     '!', "'", '&', '#', '-', '/',
-    'a', '1.',
+    'a', '1.', ':',
     'and',
     'etc',
     'for',
@@ -38,12 +38,14 @@ DELETE_LITERALS = [
 def extract_keywords( str ):
     result = []
     words = re.split( SPLIT_REGEX, str.lower() )
+    offset = 0
     for w in [ it for it in words
                if it not in DELETE_LITERALS ]:
         for r in DELETE_REGEXES:
             w = re.sub( r, '', w )
         if w != '':
             result.append( w )
+            ++offset
     return list( set( [
         it for it in result
         if it not in DELETE_LITERALS
@@ -54,7 +56,8 @@ def store_keyword_tuples( ctl_num, words, domain ):
     for w in words:
         t = { 'ctl_num' : ctl_num,
               'keyword' : w,
-              'domain'  : domain }
+              'domain'  : domain,
+              'offset'  : 42 }
         try:
             db.add_dict( 'Bib_Keywords', t )
         except mdb.IntegrityError:
