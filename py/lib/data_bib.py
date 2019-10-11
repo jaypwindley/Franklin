@@ -412,26 +412,22 @@ class data_bib( mysql_driver ):
         return self.row_array(
             """SELECT ctl_num, val
                FROM MARC_Fields
-               WHERE     tag  = '{tag}'
-                     AND code = '{code}';""".
-            format( tag  = '245',
-                    code = 'a' ) )
+               WHERE     tag  = '245'
+                     AND code = 'a' """ )
 
     def get_all_subjects( self ):
         return self.row_array(
             """SELECT ctl_num, code, val
                FROM MARC_Fields
-               WHERE tag = '{tag}';""".
-            format( tag = '650' ) )
+               WHERE tag = '650' """ )
 
     def get_all_authors( self ):
         return self.row_array(
             """SELECT ctl_num, tag, val
                FROM MARC_Fields
-               WHERE     tag LIKE '{tag}'
-                     AND code =   '{code}';""".
-            format( tag  = '1%',
-                    code = 'a' ) )
+               WHERE     tag LIKE '1%'
+                     AND code =   'a' """ )
+
 
     #-------------------------------------------------------------------
     #
