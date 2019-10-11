@@ -3,38 +3,32 @@ CREATE DATABASE IF NOT EXISTS Franklin
        COLLATE utf8mb4_unicode_ci;
 USE Franklin;
 
--- ---------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------
 -- DATA MODEL NOTES
 --
--- The control number ctl_num is generally composed of the cataloguing
--- source (i.e., as a namespace) and the 001 control field value as
--- the unique identifier within the namespace.  E.g., DLC177342 for a
--- Library of Congress catalog numer.
+-- The control number ctl_num is generally composed of the cataloguing source (i.e., as a namespace)
+-- and the 001 control field value as the unique identifier within the namespace.  E.g., DLC177342
+-- for a Library of Congress catalog numer.
 --
--- MARC_Leader is the parent table.  All other tables use the ctl_num
--- field as a foreign key into the table such that deleting the
--- MARC_Leader record for a bibliographic entry deletes all
+-- MARC_Leader is the parent table.  All other tables use the ctl_num field as a foreign key into
+-- the table such that deleting the MARC_Leader record for a bibliographic entry deletes all
 -- subordinate data.  Ditto for updates.
 --
--- Control fields have no subfields or indicators, hence their values
--- are stored directly.  Their tag values cannot duplicate within a
--- record, so no subsequencing is required.
+-- Control fields have no subfields or indicators, hence their values are stored directly.  Their
+-- tag values cannot duplicate within a record, so no subsequencing is required.
 --
--- For Indicators and Fields, a triple of (ctl_num, tag, seq)
--- identifies a specific tag.  This is because certain tags such as
--- 6xx subject fields may repeat.  Hence seq is a unique identifier
--- within the namespace (ctl_num, tag) to identify a specific instance
--- of a tag.
+-- For Indicators and Fields, a triple of (ctl_num, tag, seq) identifies a specific tag.  This is
+-- because certain tags such as 6xx subject fields may repeat.  Hence seq is a unique identifier
+-- within the namespace (ctl_num, tag) to identify a specific instance of a tag.
 --
--- Indicators are stored separately such that if a tag has no
--- indicators then no row need be stored.  If one or both indicators
--- are specified, then a row is stored.
--- ---------------------------------------------------------------------
+-- Indicators are stored separately such that if a tag has no indicators then no row need be stored.
+-- If one or both indicators are specified, then a row is stored.
+-- -------------------------------------------------------------------------------------------------
 
 
--- ---------------------------------------------------------------------
--- MARC 21 leader information from the interchange.  There is a 1:1
--- correspondence between MARC_Leader rows and bibliographic entities.
+-- -------------------------------------------------------------------------------------------------
+-- MARC 21 leader information from the interchange.  There is a 1:1 correspondence between
+-- MARC_Leader rows and bibliographic entities.
 --
 CREATE TABLE IF NOT EXISTS MARC_Leader (
        ctl_num	    CHAR(32)          NOT NULL UNIQUE KEY,
@@ -42,9 +36,8 @@ CREATE TABLE IF NOT EXISTS MARC_Leader (
 ) ENGINE = 'InnoDB';
 
 
--- ---------------------------------------------------------------------
--- MARC 21 control fields, tags 001 to 009.  These fields do not have
--- subfield codes or indicators.
+-- -------------------------------------------------------------------------------------------------
+-- MARC 21 control fields, tags 001 to 009.  These fields do not have subfield codes or indicators.
 --
 CREATE TABLE IF NOT EXISTS MARC_Control_Fields (
        ctl_num	    CHAR(32)	      NOT NULL,
@@ -60,10 +53,9 @@ CREATE TABLE IF NOT EXISTS MARC_Control_Fields (
 ) ENGINE = 'InnoDB';
 
 
--- ---------------------------------------------------------------------
--- MARC 21 indicators for each tag.  For duplicated tags, use seq to
--- disambiguate.  If a tag has all default indicators, there will be
--- no row in this table for them.
+-- -------------------------------------------------------------------------------------------------
+-- MARC 21 indicators for each tag.  For duplicated tags, use seq to disambiguate.  If a tag has all
+-- default indicators, there will be no row in this table for them.
 --
 CREATE TABLE IF NOT EXISTS MARC_Indicators (
        ctl_num	     CHAR(32)         NOT NULL,
@@ -81,14 +73,12 @@ CREATE TABLE IF NOT EXISTS MARC_Indicators (
 ) ENGINE = 'InnoDB';
 
 
--- ---------------------------------------------------------------------
--- MARC 21 field data for each tag and field.  For duplicated tags,
--- use seq to disambiguate.  Tags may appear out of order in input but
--- are "corrected" to numerical order on storage and output.  Codes
--- may appear in any order, even non-alphabetical, and may be repeated
--- (e.g., 'z' for refined geography qualifiers on 650 subject
--- headings.  Subfield codes must preserve order, hence 'pos' gives
--- original order in input.
+-- -------------------------------------------------------------------------------------------------
+-- MARC 21 field data for each tag and field.  For duplicated tags, use seq to disambiguate.  Tags
+-- may appear out of order in input but are "corrected" to numerical order on storage and output.
+-- Codes may appear in any order, even non-alphabetical, and may be repeated (e.g., 'z' for refined
+-- geography qualifiers on 650 subject headings.  Subfield codes must preserve order, hence 'pos'
+-- gives original order in input.
 --
 CREATE TABLE IF NOT EXISTS MARC_Fields (
        ctl_num	    CHAR(32)          NOT NULL,
@@ -107,13 +97,29 @@ CREATE TABLE IF NOT EXISTS MARC_Fields (
 ) ENGINE = 'InnoDB';
 
 
+-- -------------------------------------------------------------------------------------------------
+-- Keywords to aid in searches.  Ctl_num obviously gives the record in which the keyword is found.
+-- Namespace describes whether it's a title, author, or subject keyword so that searches can be
+-- restricted to a particular domain.  For records that have more than one instance of a kind of
+-- namespace (e.g., a record with several subject listings), instance distinguishes among them in
+-- the same record.  Offset describes the position of the keyword in its instance.  This is so a
+-- search algorithm can determine whether two words are adjacent.
+--
 CREATE TABLE IF NOT EXISTS Bib_Keywords (
        ctl_num	    CHAR(32)		NOT NULL,
-       domain       CHAR(1)                        DEFAULT '',
+       namespace    ENUM (
+       		       '-', -- none
+		       'A', -- author
+		       'S', -- subject
+		       'T'  -- title
+		       )                           DEFAULT '-',
        keyword      VARCHAR(256)        NOT NULL,
+       instance     SMALLINT(2)                    DEFAULT 0,
        offset       SMALLINT(2)                    DEFAULT 0,
 
-       UNIQUE ( `ctl_num`, `domain`, `keyword` ),
+       UNIQUE ( `ctl_num`, `namespace`, `keyword`, `instance`, `offset` ),
+       INDEX( `keyword` ),
+       INDEX( `keyword`, `namespace` ),
        CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
        	       ON DELETE CASCADE
 	       ON UPDATE CASCADE
