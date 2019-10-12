@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS Franklin
+CREATE DATABASE IF NOT EXISTS franklin
        CHARACTER SET utf8mb4
        COLLATE utf8mb4_unicode_ci;
-USE Franklin;
+USE franklin;
 
 -- =====================================================================
 --
@@ -13,13 +13,13 @@ USE Franklin;
 -- Describes a particular kind of role a member of staff can have.
 -- User-extensible, but programmatically implelmented.
 --
-CREATE TABLE IF NOT EXISTS `Staff_Role` (
+CREATE TABLE IF NOT EXISTS `staff_role` (
    ID           CHAR(8)            PRIMARY KEY NOT NULL,
    name         VARCHAR(32),
    description  VARCHAR(132)
 ) ENGINE = `InnoDB`;
 
-INSERT INTO `Staff_Role` VALUES
+INSERT INTO `staff_role` VALUES
    ( 'STAFF',   'Staff',       'All staff' ),
    ( 'STACK',   'Stacks',      'Stacks maintenance and shelving' ),
    ( 'CATALOG', 'Cataloging',  'Cataloging and technical service' );
@@ -29,19 +29,19 @@ INSERT INTO `Staff_Role` VALUES
 -- ---------------------------------------------------------------------
 -- A group or department among the staff.
 --
-CREATE TABLE IF NOT EXISTS `Staff_Department` (
+CREATE TABLE IF NOT EXISTS `staff_department` (
    ID           CHAR(8)            PRIMARY KEY NOT NULL,
    name         VARCHAR(32),
    description  VARCHAR(128),
-   Location_ID  CHAR(8),          -- optional location ID
+   location_ID  CHAR(8),          -- optional location ID
 
-   FOREIGN KEY ( `Location_ID` ) REFERENCES `Location` ( `ID` )
+   FOREIGN KEY ( `location_ID` ) REFERENCES `location` ( `ID` )
       ON DELETE SET NULL
       ON UPDATE CASCADE
 
 ) ENGINE = `InnoDB`;
 
-INSERT INTO `Staff_Department` VALUES
+INSERT INTO `staff_department` VALUES
    ( 'GEN',     'General',      'All departments', NULL );
 
 
@@ -49,7 +49,7 @@ INSERT INTO `Staff_Department` VALUES
 -- ---------------------------------------------------------------------
 -- Individual staff members.
 --
-CREATE TABLE IF NOT EXISTS `Staff` (
+CREATE TABLE IF NOT EXISTS `staff` (
 
    login        VARCHAR(32) PRIMARY KEY NOT NULL,
 
@@ -59,13 +59,13 @@ CREATE TABLE IF NOT EXISTS `Staff` (
 
    dept         CHAR(8),
 
-   FOREIGN KEY ( `dept` ) REFERENCES `Staff_Department` ( `ID` )
+   FOREIGN KEY ( `dept` ) REFERENCES `staff_department` ( `ID` )
      ON DELETE SET NULL
      ON UPDATE CASCADE
 
 ) ENGINE = `InnoDB`;
 
-INSERT INTO `Staff` VALUES
+INSERT INTO `staff` VALUES
    ( 'SYSTEM', 'Franklin', 'System', 'Franklin System', 'GEN'  );
 
 
@@ -73,18 +73,18 @@ INSERT INTO `Staff` VALUES
 -- ---------------------------------------------------------------------
 -- Join table for staff members and their roles.
 --
-CREATE TABLE IF NOT EXISTS `Staff_Role_Map` (
+CREATE TABLE IF NOT EXISTS `staff_role_map` (
    login           VARCHAR(32)   NOT NULL,
-   Staff_Role_ID   CHAR(8)       NOT NULL,
+   staff_role_ID   CHAR(8)       NOT NULL,
 
-   UNIQUE INDEX `staff_role` ( `login`, `Staff_Role_ID` ),
+   UNIQUE INDEX `staff_role` ( `login`, `staff_role_ID` ),
 
-   FOREIGN KEY ( `login` ) REFERENCES `Staff` ( `login` )
+   FOREIGN KEY ( `login` ) REFERENCES `staff` ( `login` )
       ON DELETE CASCADE
       ON UPDATE CASCADE,
 
-   FOREIGN KEY ( `Staff_Role_ID` )
-      REFERENCES `Staff_Role` ( `ID` )
+   FOREIGN KEY ( `staff_role_ID` )
+      REFERENCES `staff_role` ( `ID` )
       ON DELETE CASCADE
       ON UPDATE CASCADE
 

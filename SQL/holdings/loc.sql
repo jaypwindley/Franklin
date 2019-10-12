@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS Franklin
+CREATE DATABASE IF NOT EXISTS franklin
        CHARACTER SET utf8mb4
        COLLATE utf8mb4_unicode_ci;
-USE Franklin;
+USE franklin;
 
 -- -------------------------------------------------------------------------------------------------
 -- DATA MODEL NOTES\
@@ -34,13 +34,13 @@ USE Franklin;
 -- The list of available access policies for some particular location.  May be used by locations,
 -- sublocations, and individual shelving locations.
 --
-CREATE TABLE IF NOT EXISTS `Location_Access_Policy` (
+CREATE TABLE IF NOT EXISTS `location_access_policy` (
    ID            CHAR              PRIMARY KEY NOT NULL,
    name          VARCHAR(32),
    description   VARCHAR(128)
 ) ENGINE = `InnoDB`;
 
-INSERT INTO `Location_Access_Policy` VALUES
+INSERT INTO `location_access_policy` VALUES
    ( 'N', 'None',       'Staff access only' ),
    ( 'R', 'Restricted', 'Requires staff approval or supervision' ),
    ( 'O', 'Open',       'Publicly accessible' );
@@ -49,7 +49,7 @@ INSERT INTO `Location_Access_Policy` VALUES
 -- -------------------------------------------------------------------------------------------------
 -- High-level location such as a building.
 --
-CREATE TABLE IF NOT EXISTS `Location` (
+CREATE TABLE IF NOT EXISTS `location` (
    ID            CHAR(8)           PRIMARY KEY NOT NULL,
    name          VARCHAR(32),
    description   VARCHAR(128),
@@ -66,10 +66,10 @@ CREATE TABLE IF NOT EXISTS `Location` (
    geo_long      FLOAT,
 
    -- Default access for this location.  Sublocation may override.
-   Location_Access_Policy_ID CHAR NOT NULL DEFAULT 'O',
+   location_access_policy_ID CHAR NOT NULL DEFAULT 'O',
 
-   FOREIGN KEY `access` ( `Location_Access_Policy_ID` )
-      REFERENCES `Location_Access_Policy` ( `ID` )
+   FOREIGN KEY `access` ( `location_access_policy_ID` )
+      REFERENCES `location_access_policy` ( `ID` )
       ON DELETE RESTRICT
       ON UPDATE CASCADE
 
@@ -79,21 +79,21 @@ CREATE TABLE IF NOT EXISTS `Location` (
 -- -------------------------------------------------------------------------------------------------
 -- Location within a building.
 --
-CREATE TABLE IF NOT EXISTS `Sublocation` (
+CREATE TABLE IF NOT EXISTS `sublocation` (
    ID            CHAR(8)            PRIMARY KEY NOT NULL,
-   Location_ID   CHAR(8)            NOT NULL,
+   location_ID   CHAR(8)            NOT NULL,
    name          VARCHAR(32),
    description   VARCHAR(128),
 
    -- Default access for this sublocation.  Shelving may override.
-   Location_Access_Policy_ID CHAR,
+   location_access_policy_ID CHAR,
 
-   FOREIGN KEY ( `Location_ID` ) REFERENCES `Location` ( `ID` )
+   FOREIGN KEY ( `location_ID` ) REFERENCES `location` ( `ID` )
       ON DELETE RESTRICT
       ON UPDATE CASCADE,
 
-   FOREIGN KEY ( `Location_Access_Policy_ID` )
-      REFERENCES `Location_Access_Policy` ( `ID` )
+   FOREIGN KEY ( `location_access_policy_ID` )
+      REFERENCES `location_access_policy` ( `ID` )
       ON DELETE SET NULL
       ON UPDATE CASCADE
 
@@ -103,13 +103,13 @@ CREATE TABLE IF NOT EXISTS `Sublocation` (
 -- -------------------------------------------------------------------------------------------------
 -- The scheme for organizing items within a shelving location.  User-extensible.
 --
-CREATE TABLE IF NOT EXISTS `Shelving_Scheme` (
+CREATE TABLE IF NOT EXISTS `shelving_scheme` (
    ID             CHAR(8)       PRIMARY KEY NOT NULL,
    name           VARCHAR(32),
    description    VARCHAR(128)
 ) ENGINE = `InnoDB`;
 
-INSERT INTO `Shelving_Scheme` VALUES
+INSERT INTO `shelving_scheme` VALUES
    ( 'CLASS',   'Classification',    'Subject classification (i.e., call number)' ),
    ( 'SERIAL',  'Serial number',     'Imposed serial number, location specific' ),
    ( 'AUTHOR',  'Author',            'Author name' ),
@@ -121,25 +121,25 @@ INSERT INTO `Shelving_Scheme` VALUES
 -- -------------------------------------------------------------------------------------------------
 -- A shelving location within a continguous physical space (sublocation).
 --
-CREATE TABLE IF NOT EXISTS `Shelving_Location` (
+CREATE TABLE IF NOT EXISTS `shelving_location` (
    ID                         CHAR(8)         PRIMARY KEY NOT NULL,
-   Sublocation_ID             CHAR(8),
+   sublocation_ID             CHAR(8),
    name                       VARCHAR(32),
    description                VARCHAR(128),
 
-   Shelving_Scheme_ID         CHAR(8),
-   Location_Access_Policy_ID  CHAR,
+   shelving_scheme_ID         CHAR(8),
+   location_access_policy_ID  CHAR,
 
-   FOREIGN KEY ( `Sublocation_ID` ) REFERENCES `Sublocation` ( `ID` )
+   FOREIGN KEY ( `sublocation_ID` ) REFERENCES `sublocation` ( `ID` )
      ON DELETE SET NULL
      ON UPDATE CASCADE,
 
-   FOREIGN KEY ( `Shelving_Scheme_ID` ) REFERENCES `Shelving_Scheme` ( `ID` )
+   FOREIGN KEY ( `shelving_scheme_ID` ) REFERENCES `shelving_scheme` ( `ID` )
      ON DELETE SET NULL
      ON UPDATE CASCADE,
 
-   FOREIGN KEY ( `Location_Access_Policy_ID` )
-     REFERENCES `Location_Access_Policy` ( `ID` )
+   FOREIGN KEY ( `location_access_policy_ID` )
+     REFERENCES `location_access_policy` ( `ID` )
      ON DELETE SET NULL
      ON UPDATE CASCADE
 
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `Shelving_Location` (
 -- -------------------------------------------------------------------------------------------------
 -- The location of an electronic resource, typically accessible via HTTP.
 --
-CREATE TABLE IF NOT EXISTS `Electronic_Location` (
+CREATE TABLE IF NOT EXISTS `electronic_location` (
    ID            INTEGER(6)    PRIMARY KEY AUTO_INCREMENT,
 
    -- URI elements

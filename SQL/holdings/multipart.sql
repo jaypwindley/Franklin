@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS Franklin
+CREATE DATABASE IF NOT EXISTS franklin
        CHARACTER SET utf8mb4
        COLLATE utf8mb4_unicode_ci;
-USE Franklin;
+USE franklin;
 
 -- =====================================================================
 --
@@ -16,7 +16,7 @@ USE Franklin;
 -- Annotation for serial bibliographic units, describing the holdings
 -- policy, retention, and enumeration.
 --
-CREATE TABLE IF NOT EXISTS `Multipart_Profile` (
+CREATE TABLE IF NOT EXISTS `multipart_profile` (
    ctl_num      CHAR(32) NOT NULL PRIMARY KEY,
 
    -- Acquisition and retention policies.
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `Multipart_Profile` (
    chron_cap_2  VARCHAR(12) DEFAULT 'month', -- cf. also 'season'
    chron_cap_3  VARCHAR(12) DEFAULT 'day',   -- cf. also 'week', 'day'
 
-   FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
+   FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_leader` ( `ctl_num` )
       ON DELETE CASCADE
       ON UPDATE CASCADE
 

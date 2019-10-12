@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS Franklin
+CREATE DATABASE IF NOT EXISTS franklin
        CHARACTER SET utf8mb4
        COLLATE utf8mb4_unicode_ci;
-USE Franklin;
+USE franklin;
 
 -- =====================================================================
 --
@@ -17,13 +17,13 @@ USE Franklin;
 -- user-extensible, but the preformatted ones here are those from the
 -- MARC21 classifications.
 --
-CREATE TABLE IF NOT EXISTS `Content_Type` (
+CREATE TABLE IF NOT EXISTS `content_type` (
    ID          CHAR(8)        PRIMARY KEY NOT NULL,
    name        VARCHAR(32),
    description VARCHAR(128)
 ) ENGINE = `InnoDB`;
 
-INSERT INTO `Content_Type` VALUES
+INSERT INTO `content_type` VALUES
    ( 'CART',    'cartographic',        'map, globe, or similar geographic information' ),
    ( 'ELEC',    'electronic',          'machine-interpretable instruction (e.g., software)' ),
    ( 'PERF',    'notated performance', 'dance, music, etc. in written form' ),
@@ -44,13 +44,13 @@ INSERT INTO `Content_Type` VALUES
 -- the content to a patron.  The default is DIRECT which is simply
 -- looking at the medium to recieve the information.
 --
-CREATE TABLE IF NOT EXISTS `Media_Type` (
+CREATE TABLE IF NOT EXISTS `media_type` (
    ID             CHAR(8)          PRIMARY KEY NOT NULL,
    name           VARCHAR(32),
    description    VARCHAR(128)
 ) ENGINE = `InnoDB`;
 
-INSERT INTO `Media_Type` VALUES
+INSERT INTO `media_type` VALUES
    ( 'AUDIO',     'sound recording', 'music CD, phonograph record, computer sound file' ),
    ( 'ELEC',      'computer',        'software or programmatic content' ),
    ( 'MICFORM',   'microform',       'microfilm, microfiche, etc.' ),
@@ -66,25 +66,25 @@ INSERT INTO `Media_Type` VALUES
 -- embodies the information.  This is a sparse combination of
 -- Content_Type and Media_Type.
 --
-CREATE TABLE IF NOT EXISTS `Carrier_Type` (
-   Content_Type_ID  CHAR(8),
-   Media_Type_ID    CHAR(8),
+CREATE TABLE IF NOT EXISTS `carrier_type` (
+   content_type_ID  CHAR(8),
+   media_type_ID    CHAR(8),
    ID               CHAR(8) NOT NULL,
    name             VARCHAR(32),
    description      VARCHAR(128),
 
-   UNIQUE INDEX ( `Content_Type_ID`, `Media_Type_ID`, `ID` ),
+   UNIQUE INDEX ( `content_type_ID`, `media_type_ID`, `ID` ),
 
-   FOREIGN KEY ( `Content_Type_ID` ) REFERENCES `Content_Type` ( `ID` )
+   FOREIGN KEY ( `content_type_ID` ) REFERENCES `content_type` ( `ID` )
       ON DELETE CASCADE
       ON UPDATE CASCADE,
 
-   FOREIGN KEY ( `Media_Type_ID` ) REFERENCES `Media_Type` ( `ID` )
+   FOREIGN KEY ( `media_type_ID` ) REFERENCES `media_type` ( `ID` )
       ON DELETE CASCADE
       ON UPDATE CASCADE
 ) ENGINE = `InnoDB`;
 
-INSERT INTO `Carrier_Type` VALUES
+INSERT INTO `carrier_type` VALUES
 
 --   Content    Media       Carrier     (short) Name           Description
 

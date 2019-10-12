@@ -107,13 +107,13 @@ CREATE TABLE IF NOT EXISTS MARC_fields (
 --
 CREATE TABLE IF NOT EXISTS bib_keywords (
        ctl_num	    CHAR(32)		NOT NULL,
+       keyword      VARCHAR(256)        NOT NULL,
        namespace    ENUM (
        		       '-', -- none
 		       'A', -- author
 		       'S', -- subject
 		       'T'  -- title
 		       )                           DEFAULT '-',
-       keyword      VARCHAR(256)        NOT NULL,
        instance     SMALLINT(2)                    DEFAULT 0,
        offset       SMALLINT(2)                    DEFAULT 0,
 
