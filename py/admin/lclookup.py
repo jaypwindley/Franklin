@@ -1,4 +1,14 @@
 #!/usr/bin/env python3
+"""
+# -----------------------------------------------------------------------
+#  File:              lclookup.py
+#  Description:       LC catalog lookup and store
+#  Author:            Jay Windley <jwindley>
+#  Created:           Fri Oct 11 17:38:34 2019
+#  Copyright:         (c) 2019 Jay Windley
+#                     All rights reserved.
+# -----------------------------------------------------------------------
+"""
 
 import re
 import sys
@@ -17,8 +27,8 @@ db = data_bib( config.CREDENTIALS['database'][db_name] )
 
 XML_parser = MARC_XML.MARC_XML_parser()
 
-index_regex = re.compile( '^[\d]{1,2}$' )
-marc_regex = re.compile( '^m[\d]{1,2}$' )
+index_regex = re.compile( r'^[\d]{1,2}$' )
+marc_regex = re.compile( r'^m[\d]{1,2}$' )
 
 SRU_keys = {
     'l' : 'LCCN',
@@ -77,49 +87,51 @@ def select_record( records, prompt_detail ):
         return cmd
 
 
-try:
-    mode = sys.argv[ 1 ]
-except IndexError:
-    mode = ''
+if __name__ == "__main__":
 
-if mode == 'scan':
+    try:
+        mode = sys.argv[ 1 ]
+    except IndexError:
+        mode = ''
 
-    ISBN = ''
-    while True:
+    if mode == 'scan':
 
-        if ISBN == '':
-            ISBN = get_prompted_input( 'ISBN: ' )
+        ISBN = ''
+        while True:
 
-        records = LC_search( { 'ISBN' : ISBN } )
-        if records is None or len( records ) == 0:
-            print( '*** not found ***' )
-            ISBN = ''
-            continue
+            if ISBN == '':
+                ISBN = get_prompted_input( 'ISBN: ' )
 
-        # If only one record returned, live dangerously and store it.
-        if len( records ) == 1:
-            print( '>>> storing record' )
-            save_record( records[ 0 ], db )
-            ISBN = ''
-            continue
+            records = LC_search( { 'ISBN' : ISBN } )
+            if records is None or len( records ) == 0:
+                print( '*** not found ***' )
+                ISBN = ''
+                continue
 
-        ISBN = select_record( records, ', or next ISBN: ' )
+            # If only one record returned, live dangerously and store it.
+            if len( records ) == 1:
+                print( '>>> storing record' )
+                save_record( records[ 0 ], db )
+                ISBN = ''
+                continue
 
-else:
+            ISBN = select_record( records, ', or next ISBN: ' )
 
-    while True:
+    else:
 
-        type = get_prompted_input( '(L)CCN, (T)itle, (A)uthor, (I)SBN: ' );
-        try:
-            key = SRU_keys[ type ]
-        except KeyError:
-            continue
+        while True:
 
-        search = get_prompted_input( key + ' search: ' )
+            type = get_prompted_input( '(L)CCN, (T)itle, (A)uthor, (I)SBN: ' );
+            try:
+                key = SRU_keys[ type ]
+            except KeyError:
+                continue
 
-        records = LC_search( { key : search } )
-        if records is None or len( records ) == 0:
-            print( '*** not found ***' )
-            continue
+            search = get_prompted_input( key + ' search: ' )
 
-        select_record( records, ' or Enter for none: ' )
+            records = LC_search( { key : search } )
+            if records is None or len( records ) == 0:
+                print( '*** not found ***' )
+                continue
+
+            select_record( records, ' or Enter for none: ' )
