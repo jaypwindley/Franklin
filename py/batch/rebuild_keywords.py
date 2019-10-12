@@ -89,14 +89,14 @@ if __name__ == "__main__":
 
     for author in db.get_all_authors():
         store_keyword_tuples(
-            title[ 0 ],
+            author[ 0 ],
             extract_keywords( author[ 2 ] ),
             'A' )
     db.commit()
 
     for subject in db.get_all_subjects():
         store_keyword_tuples(
-            title[ 0 ],
+            subject[ 0 ],
             extract_keywords( subject[ 2 ] ),
             'S' )
     db.commit()
