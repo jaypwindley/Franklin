@@ -9,7 +9,7 @@ sys.path.append( '../lib' )
 import config
 from data_bib import data_bib
 
-db_name = 'Franklin'
+db_name = 'franklin'
 db = data_bib( config.CREDENTIALS['database'][db_name] )
 
 SPLIT_REGEX = re.compile( r'[ ~\,\-]' )
@@ -66,7 +66,7 @@ def store_keyword_tuples( ctl_num, words, namespace, instance = 0 ):
               'instance'   : instance,
               'offset'     : w[ 'offset' ] }
         try:
-            db.add_dict( 'Bib_Keywords', t )
+            db.add_dict( 'bib_keywords', t )
         except mdb.IntegrityError:
             pass
 
@@ -74,7 +74,7 @@ def store_keyword_tuples( ctl_num, words, namespace, instance = 0 ):
 if __name__ == "__main__":
 
     # Clear current keyword entries; we will rebuild from scratch.
-    db.execute( 'DELETE FROM Bib_Keywords' )
+    db.clear_keywords()
 
     # @todo This isn't going to work right until the traversal is made to work right.  The titles
     # will be missing subtitles because we can't join on a and b fields.  Authors will be mixed

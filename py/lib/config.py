@@ -23,10 +23,10 @@ RPC = {
 
 # ------------------------------------------------------------------------
 # Host access user names and passwords.
-# 
+#
 CREDENTIALS = {
     'database': {
-        'Franklin': {
+        'franklin': {
             'host': 'kibbles',
             'user': 'biblio',
             'pass': 'silence_dogood'
@@ -56,7 +56,7 @@ SRU = {
     'port'    : 210,
     'path'    : '/LCDB',
     'url'     : 'http://lx2.loc.gov:210/LCDB',
-    
+
     'version' : '1.1',
     'search'  : {
         'op'       : 'searchRetrieve',

@@ -22,7 +22,7 @@ import MARC_XML
 from data_bib import data_bib
 
 
-db_name = 'Franklin'
+db_name = 'franklin'
 db = data_bib( config.CREDENTIALS['database'][db_name] )
 
 XML_parser = MARC_XML.MARC_XML_parser()

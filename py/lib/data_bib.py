@@ -33,7 +33,7 @@ class data_bib( mysql_driver ):
     def __init__( self, conn_data ):
 
         # Attempt to connect to database.
-        conn_data['db'] = 'Franklin'
+        conn_data['db'] = 'franklin'
         mysql_driver.__init__( self, conn_data )
 
 
@@ -182,7 +182,7 @@ class data_bib( mysql_driver ):
     #
     def get_leader( self, ctl_num ):
         return self.single_value( """SELECT   val
-                                     FROM     MARC_Leader
+                                     FROM     MARC_leader
                                      WHERE    ctl_num = '{}';""".
                                   format( ctl_num ) )
 
@@ -194,7 +194,7 @@ class data_bib( mysql_driver ):
     #
     def get_control_fields( self, ctl_num ):
         return self.row_array( """SELECT  tag, val
-                                  FROM    MARC_Control_Fields
+                                  FROM    MARC_control_fields
                                   WHERE   ctl_num = '{}';""".
                                format( ctl_num ) )
 
@@ -208,7 +208,7 @@ class data_bib( mysql_driver ):
         data = self.row_array( """SELECT
                                     ind_1, ind_2
                                   FROM
-                                    MARC_Indicators
+                                    MARC_indicators
                                   WHERE
                                             ctl_num = '{ctl_num_val}'
                                         AND tag     = '{tag_val}'
@@ -233,7 +233,7 @@ class data_bib( mysql_driver ):
         return self.row_array( """SELECT
                                     tag, seq, code, pos, val
                                   FROM
-                                    MARC_Fields
+                                    MARC_fields
                                   WHERE
                                     ctl_num = '{}'
                                   ORDER BY     tag
@@ -244,7 +244,7 @@ class data_bib( mysql_driver ):
 
 
     def insert_leader( self, ctl_num, val ):
-        self.execute( """INSERT INTO MARC_Leader (
+        self.execute( """INSERT INTO MARC_leader (
                            `ctl_num`,
                            `val`
                           ) VALUES (
@@ -253,19 +253,19 @@ class data_bib( mysql_driver ):
                       format( ctl_num = ctl_num, val = val ) )
 
     def update_leader( self, ctl_num, val ):
-        self.execute( """UPDATE  MARC_Leader
+        self.execute( """UPDATE  MARC_leader
                          SET     `val` = '{val}'
                          WHERE   `ctl_num` = '{ctl_num}';""".
                       format( ctl_num = ctl_num, val = val ) )
 
     def delete_leader( self, ctl_num ):
-        self.execute( "DELETE FROM MARC_Leader WHERE `ctl_num` = '{ctl_num}';"
+        self.execute( "DELETE FROM MARC_leader WHERE `ctl_num` = '{ctl_num}';"
                       .format( ctl_num = ctl_num ) )
 
 
 
     def insert_control_field( self, ctl_num, tag, val ):
-        self.execute( """INSERT INTO MARC_Control_Fields (
+        self.execute( """INSERT INTO MARC_control_fields (
                            `ctl_num`,
                            `tag`,
                            `val`
@@ -279,7 +279,7 @@ class data_bib( mysql_driver ):
                               val     = val ) )
 
     def update_control_field( self, ctl_num, tag, val ):
-        self.execute( """UPDATE MARC_Control_Fields
+        self.execute( """UPDATE MARC_control_fields
                          SET `val` = '{val}'
                          WHERE     `ctl_num` = '{ctl_num}'
                                AND `tag`     = '{tag}';""".
@@ -288,20 +288,20 @@ class data_bib( mysql_driver ):
                               val     = val ) )
 
     def delete_control_field( self, ctl_num, tag ):
-        self.execute( """DELETE FROM MARC_Control_Fields
+        self.execute( """DELETE FROM MARC_control_fields
                          WHERE     `ctl_num` = '{ctl_num}'
                                AND `tag`     = '{tag}';""".
                       format( ctl_num = ctl_num,
                               tag_val = tag ) )
 
     def delete_all_control_fields( self, ctl_num ):
-        self.execute( """DELETE FROM MARC_Control_Fields
+        self.execute( """DELETE FROM MARC_control_fields
                          WHERE `ctl_num` = '{ctl_num}';""".
                       format( ctl_num = ctl_num ) )
 
 
     def insert_indicators( self, ctl_num, tag, seq, ind ):
-        self.execute( """INSERT INTO MARC_Indicators (
+        self.execute( """INSERT INTO MARC_indicators (
                            `ctl_num`,
                            `tag`,
                            `seq`,
@@ -321,7 +321,7 @@ class data_bib( mysql_driver ):
                               ind_2   = ind[1:2] ) )
 
     def update_indicators( self, ctl_num, tag, seq, ind ):
-        self.execute( """UPDATE MARC_Indicators
+        self.execute( """UPDATE MARC_indicators
                          SET
                            `ind_1` = '{ind_1}',
                            `ind_2` = '{ind_2}'
@@ -335,7 +335,7 @@ class data_bib( mysql_driver ):
                               ind_2 = ind[1:2] ) )
 
     def delete_indicators( self, ctl_num, tag, seq ):
-        self.execute( """DELETE FROM MARC_Indicators
+        self.execute( """DELETE FROM MARC_indicators
                          WHERE     `ctl_num` = '{ctl_num}'
                                AND `tag`     = '{tag}'
                                AND `seq`     =  {seq};""".
@@ -344,13 +344,13 @@ class data_bib( mysql_driver ):
                               seq     = seq ) )
 
     def delete_all_indicators( self, ctl_num ):
-        self.execute( """DELETE FROM MARC_Indicators
+        self.execute( """DELETE FROM MARC_indicators
                          WHERE `ctl_num` = '{ctl_num}';""".
                       format( ctl_num = ctl_num ) )
 
 
     def insert_field( self, ctl_num, tag, seq, code, pos, val ):
-        self.execute( """INSERT INTO MARC_Fields (
+        self.execute( """INSERT INTO MARC_fields (
                            `ctl_num`,
                            `tag`,
                            `seq`,
@@ -373,7 +373,7 @@ class data_bib( mysql_driver ):
 
 
     def update_field( self, ctl_num, tag, seq, code, pos, val ):
-        self.execute( """UPDATE MARC_Fields
+        self.execute( """UPDATE MARC_fields
                          SET `val` = '{val}'
                          WHERE     `ctl_num` = '{ctl_num}'
                                AND `tag`  = '{tag}'
@@ -388,7 +388,7 @@ class data_bib( mysql_driver ):
                               val     = self.esc( val ) ) )
 
     def delete_field( self, ctl_num, tag, seq, code, pos ):
-        self.execute( """DELETE FROM MARC_Fields
+        self.execute( """DELETE FROM MARC_fields
                          WHERE     `ctl_num` = '{ctl_num}'
                                AND `tag`  = '{tag}'
                                AND  seq   =  {seq}
@@ -401,7 +401,7 @@ class data_bib( mysql_driver ):
                               pos     = pos ) )
 
     def delete_all_fields( self, ctl_num ):
-        self.execute( """DELETE FROM MARC_Fields
+        self.execute( """DELETE FROM MARC_fields
                          WHERE `ctl_num` = '{ctl_num}';""".
                       format( ctl_num = ctl_num ) )
 
@@ -411,33 +411,35 @@ class data_bib( mysql_driver ):
     def get_all_titles( self ):
         return self.row_array(
             """SELECT ctl_num, val
-               FROM MARC_Fields
+               FROM MARC_fields
                WHERE     tag  = '245'
                      AND code = 'a' """ )
 
     def get_all_subjects( self ):
         return self.row_array(
             """SELECT ctl_num, code, val
-               FROM MARC_Fields
+               FROM MARC_fields
                WHERE tag = '650' """ )
 
     def get_all_authors( self ):
         return self.row_array(
             """SELECT ctl_num, tag, val
-               FROM MARC_Fields
+               FROM MARC_fields
                WHERE     tag LIKE '1%'
                      AND code =   'a' """ )
 
 
-    #-------------------------------------------------------------------
-    #
-    def match_keywords( self, key_list, domain_list, limit ):
+    def clear_keywords( self ):
+        self.execute( 'DELETE FROM bib_keywords' )
+
+
+    def match_keywords( self, key_list, namespace_list, limit ):
         limit_phrase = ''
         if limit > 0: limit_phrase = ' LIMIT {}'.format( limit )
-        domain_phrase = ''
-        if len( domain_list ) > 0:
-            domain_phrase = ' AND domain IN ( {} )'.format(
-                ','.join( map( lambda x: "'" + x + "'", domain_list ) )
+        namespace_phrase = ''
+        if len( namespace_list ) > 0:
+            namespace_phrase = ' AND namespace IN ( {} )'.format(
+                ','.join( map( lambda x: "'" + x + "'", namespace_list ) )
                 )
         key_phrase = ' WHERE keyword IN ( {} )'.format(
             ','.join( map( lambda x: "'" + x + "'", key_list ) )
@@ -447,15 +449,15 @@ class data_bib( mysql_driver ):
             ctl_num,
             COUNT(*) AS count
           FROM
-            Bib_Keywords
+            bib_keywords
           {key_phrase}
-          {domain_phrase}
+          {namespace_phrase}
           GROUP BY
             ctl_num
           ORDER BY count DESC
           {limit_phrase};""".format(
-            key_phrase     = key_phrase,
-            domain_phrase  = domain_phrase,
-            limit_phrase   = limit_phrase )
+            key_phrase        = key_phrase,
+            namespace_phrase  = domain_phrase,
+            limit_phrase      = limit_phrase )
 
         return [ tuple( row ) for row in self.row_array( SQL ) ]

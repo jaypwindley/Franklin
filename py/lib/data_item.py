@@ -14,7 +14,5 @@ from data_mysql import data_mysql
 class data_item( mysql_driver ):
 
     def __init__( self, conn_data ):
-        conn_data[ 'db' ] = 'Franklin'
+        conn_data[ 'db' ] = 'franklin'
         mysql_driver( conn_data )
-
-    

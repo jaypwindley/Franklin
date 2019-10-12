@@ -28,7 +28,7 @@ from   data_mysql  import mysql_driver
 class data_ID( mysql_driver ):
 
     def __init__( self, conn_data ):
-        conn_data[ 'db' ] = 'Franklin'
+        conn_data[ 'db' ] = 'franklin'
         mysql_driver.__init__( self, conn_data )
 
     #-------------------------------------------------------------------
@@ -51,7 +51,7 @@ class data_ID( mysql_driver ):
                               obj.__dict__,
                               'ID' )
 
-            
+
     #-------------------------------------------------------------------
     # Delete an ID-indexed object.
     #
@@ -65,12 +65,12 @@ class data_ID( mysql_driver ):
 
 
 
-        
+
 if __name__ == '__main__':
     import Location
     db_name = 'Franklin'
     db = data_ID( config.CREDENTIALS['database'][db_name] )
-    
+
     obj = db.get_object( Location.Location_Access_Policy, "R" )
 
     obj = Location.Shelving_Scheme( ID = 'HEAP',

@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS Franklin
+CREATE DATABASE IF NOT EXISTS franklin
        CHARACTER SET utf8mb4
        COLLATE utf8mb4_unicode_ci;
-USE Franklin;
+USE franklin;
 
 -- -------------------------------------------------------------------------------------------------
 -- DATA MODEL NOTES
@@ -30,7 +30,7 @@ USE Franklin;
 -- MARC 21 leader information from the interchange.  There is a 1:1 correspondence between
 -- MARC_Leader rows and bibliographic entities.
 --
-CREATE TABLE IF NOT EXISTS MARC_Leader (
+CREATE TABLE IF NOT EXISTS MARC_leader (
        ctl_num	    CHAR(32)          NOT NULL UNIQUE KEY,
        val	    CHAR(25)
 ) ENGINE = 'InnoDB';
@@ -39,14 +39,14 @@ CREATE TABLE IF NOT EXISTS MARC_Leader (
 -- -------------------------------------------------------------------------------------------------
 -- MARC 21 control fields, tags 001 to 009.  These fields do not have subfield codes or indicators.
 --
-CREATE TABLE IF NOT EXISTS MARC_Control_Fields (
+CREATE TABLE IF NOT EXISTS MARC_control_fields (
        ctl_num	    CHAR(32)	      NOT NULL,
        tag	    CHAR(3)           NOT NULL,
        val	    VARCHAR(128),
 
        PRIMARY KEY ( ctl_num, tag ),
        INDEX (`ctl_num` ),
-       CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
+       CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_leader` ( `ctl_num` )
        		  ON DELETE CASCADE
 		  ON UPDATE CASCADE
 
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS MARC_Control_Fields (
 -- MARC 21 indicators for each tag.  For duplicated tags, use seq to disambiguate.  If a tag has all
 -- default indicators, there will be no row in this table for them.
 --
-CREATE TABLE IF NOT EXISTS MARC_Indicators (
+CREATE TABLE IF NOT EXISTS MARC_indicators (
        ctl_num	     CHAR(32)         NOT NULL,
        tag	     CHAR(3)          NOT NULL,
        seq	     TINYINT          NOT NULL DEFAULT  1,
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS MARC_Indicators (
 
        PRIMARY KEY ( ctl_num, tag, seq ),
        INDEX (`ctl_num` ),
-       CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
+       CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_leader` ( `ctl_num` )
        		  ON DELETE CASCADE
 		  ON UPDATE CASCADE
 
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS MARC_Indicators (
 -- geography qualifiers on 650 subject headings.  Subfield codes must preserve order, hence 'pos'
 -- gives original order in input.
 --
-CREATE TABLE IF NOT EXISTS MARC_Fields (
+CREATE TABLE IF NOT EXISTS MARC_fields (
        ctl_num	    CHAR(32)          NOT NULL,
        tag	    CHAR(3)           NOT NULL,
        seq	    TINYINT           NOT NULL DEFAULT  1,
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS MARC_Fields (
 
        INDEX ( ctl_num, tag, seq, pos ),
        INDEX (`ctl_num` ),
-       CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
+       CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_leader` ( `ctl_num` )
        		  ON DELETE CASCADE
 		  ON UPDATE CASCADE
 
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS MARC_Fields (
 -- the same record.  Offset describes the position of the keyword in its instance.  This is so a
 -- search algorithm can determine whether two words are adjacent.
 --
-CREATE TABLE IF NOT EXISTS Bib_Keywords (
+CREATE TABLE IF NOT EXISTS bib_keywords (
        ctl_num	    CHAR(32)		NOT NULL,
        namespace    ENUM (
        		       '-', -- none
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS Bib_Keywords (
        UNIQUE ( `ctl_num`, `namespace`, `keyword`, `instance`, `offset` ),
        INDEX( `keyword` ),
        INDEX( `keyword`, `namespace` ),
-       CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_Leader` ( `ctl_num` )
+       CONSTRAINT FOREIGN KEY ( `ctl_num` ) REFERENCES `MARC_leader` ( `ctl_num` )
        	       ON DELETE CASCADE
 	       ON UPDATE CASCADE
 ) ENGINE = 'InnoDB';
