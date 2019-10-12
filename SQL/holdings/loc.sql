@@ -3,43 +3,36 @@ CREATE DATABASE IF NOT EXISTS Franklin
        COLLATE utf8mb4_unicode_ci;
 USE Franklin;
 
--- --------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------
 -- DATA MODEL NOTES\
 --
 -- == Specificity
 --
---    Many tables adopt the schema of a mnemonic key value, a short
---    name, and a lengthy description.  The mnemonic key value is not
---    generally displayed; it is simply for ease of debugging while
---    reading the raw tables.  The short description should be displayed
---    in most UI contexts, followed by the lengthier description upon
---    user request.
--- --------------------------------------------------------------------
+--    Many tables adopt the schema of a mnemonic key value, a short name, and a lengthy description.
+--    The mnemonic key value is not generally displayed; it is simply for ease of debugging while
+--    reading the raw tables.  The short description should be displayed in most UI contexts,
+--    followed by the lengthier description upon user request.
+--    ----------------------------------------------------------------------------------------------
 
 
--- =====================================================================
 --
---                 LOCATIONS, SUBLOCATIONS, SHELVING
+-- LOCATIONS, SUBLOCATIONS, SHELVING
 --
--- =====================================================================
 
--- ---------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------
 -- DATA MODEL NOTES
 --
--- The location model reflects the MARC21 Holdings scheme.  The most
--- general location is assumed to be a physical building.  The
--- sublocation is assumed a room or designated area within the building.
--- The shelving location is assumed to be some sublocation-specific
--- designation.  Access policies apply here in the form of whether the
--- shelving is open to visitors and patrons and may vary by any of the
--- levels of location.
--- ---------------------------------------------------------------------
+-- The location model reflects the MARC21 Holdings scheme.  The most general location is assumed to
+-- be a physical building.  The sublocation is assumed a room or designated area within the
+-- building.  The shelving location is assumed to be some sublocation-specific designation.  Access
+-- policies apply here in the form of whether the shelving is open to visitors and patrons and may
+-- vary by any of the levels of location.
+-- -------------------------------------------------------------------------------------------------
 
 
--- ---------------------------------------------------------------------
--- The list of available access policies for some particular location.
--- May be used by locations, sublocations, and individual shelving
--- locations.
+-- -------------------------------------------------------------------------------------------------
+-- The list of available access policies for some particular location.  May be used by locations,
+-- sublocations, and individual shelving locations.
 --
 CREATE TABLE IF NOT EXISTS `Location_Access_Policy` (
    ID            CHAR              PRIMARY KEY NOT NULL,
@@ -53,7 +46,7 @@ INSERT INTO `Location_Access_Policy` VALUES
    ( 'O', 'Open',       'Publicly accessible' );
 
 
--- ---------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------
 -- High-level location such as a building.
 --
 CREATE TABLE IF NOT EXISTS `Location` (
@@ -83,8 +76,7 @@ CREATE TABLE IF NOT EXISTS `Location` (
 ) ENGINE = `InnoDB`;
 
 
-
--- ---------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------
 -- Location within a building.
 --
 CREATE TABLE IF NOT EXISTS `Sublocation` (
@@ -108,10 +100,8 @@ CREATE TABLE IF NOT EXISTS `Sublocation` (
 ) ENGINE = `InnoDB`;
 
 
-
--- ---------------------------------------------------------------------
--- The scheme for organizing items within a shelving location.
--- User-extensible.
+-- -------------------------------------------------------------------------------------------------
+-- The scheme for organizing items within a shelving location.  User-extensible.
 --
 CREATE TABLE IF NOT EXISTS `Shelving_Scheme` (
    ID             CHAR(8)       PRIMARY KEY NOT NULL,
@@ -128,8 +118,7 @@ INSERT INTO `Shelving_Scheme` VALUES
    ( 'NONE',    'None',              'No shelving scheme' );
 
 
-
--- ---------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------
 -- A shelving location within a continguous physical space (sublocation).
 --
 CREATE TABLE IF NOT EXISTS `Shelving_Location` (
@@ -157,10 +146,8 @@ CREATE TABLE IF NOT EXISTS `Shelving_Location` (
 ) ENGINE = `InnoDB`;
 
 
-
--- ---------------------------------------------------------------------
--- The location of an electronic resource, typically accessible via
--- HTTP.
+-- -------------------------------------------------------------------------------------------------
+-- The location of an electronic resource, typically accessible via HTTP.
 --
 CREATE TABLE IF NOT EXISTS `Electronic_Location` (
    ID            INTEGER(6)    PRIMARY KEY AUTO_INCREMENT,
