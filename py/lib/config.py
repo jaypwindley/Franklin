@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+"""
 # -----------------------------------------------------------------------
 #  File:              config.py
 #  Description:       Installation dependent configuration
@@ -7,19 +8,9 @@
 #  Copyright:         (c) 2013 Jay Windley
 #                     All rights reserved.
 # -----------------------------------------------------------------------
+"""
 
 DEBUG = 0
-
-RPC = {
-    'bib': {
-        'host': 'localhost',
-        'port': 1138
-        },
-    'staff': {
-        'host': 'localhost',
-        'port': 1138
-        }
-    }
 
 # ------------------------------------------------------------------------
 # Host access user names and passwords.
@@ -34,7 +25,19 @@ CREDENTIALS = {
         }
     }
 
-HOME = '/home/jwindley/Dropbox/Projects/Franklin/'
+
+REST = {
+    'host'     : 'localhost',
+    'port'     : '1138',
+    'version'  : '1'
+    }
+
+API = {
+    'base_url' : 'http://' + REST['host'] + ':' + REST['port'] + '/api/v' + REST['version'] + '/'
+    }
+
+
+HOME = '/home/jwindley/src/Franklin/'
 
 PATHS = {
     'spool' : {
