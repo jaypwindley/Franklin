@@ -33,7 +33,8 @@ REST = {
     }
 
 API = {
-    'base_url' : 'http://' + REST['host'] + ':' + REST['port'] + '/api/v' + REST['version'] + '/'
+    'base_url' : 'http://' + REST['host'] + ':' + REST['port'] + '/api/v' + REST['version'] + '/',
+    'features' : [ 'auth', 'bib' ]
     }
 
 
