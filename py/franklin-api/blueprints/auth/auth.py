@@ -2,31 +2,31 @@
 
 import sys
 sys.path.append( '..' )
-import api_tools
+import api_tools as API
 
 from flask import Blueprint
 
 responder = Blueprint( 'auth', __name__ )
 
 
-@responder.route( '/auth/login', methods = [ 'GET' ] )
-@api_tools.to_json
-@api_tools.errno
+@responder.route( API.route( 'auth/login' ), methods = [ 'GET' ] )
+@API.to_json
+@API.errno
 def login():
     """Validate user name and password"""
     return { 'user' : 'foo', 'token' : 'foo' }
 
 
-@responder.route( '/auth/tokens', methods = [ 'GET' ] )
-@api_tools.to_json
-@api_tools.errno
+@responder.route( API.route( '/auth/tokens' ), methods = [ 'GET' ] )
+@API.to_json
+@API.errno
 def tokens():
     """Get list of active tokens"""
     return { 'tokens' : [] }
 
 
-@responder.route( '/auth/token/<t>', methods = [ 'GET', 'DELETE' ] )
-@api_tools.to_json
-@api_tools.errno
+@responder.route( API.route( '/auth/token/<t>' ), methods = [ 'GET', 'DELETE' ] )
+@API.to_json
+@API.errno
 def show_or_edit_token():
     return { 'token' : t }

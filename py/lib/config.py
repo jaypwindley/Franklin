@@ -33,10 +33,12 @@ REST = {
     }
 
 API = {
-    'base_url' : 'http://' + REST['host'] + ':' + REST['port'] + '/api/v' + REST['version'] + '/',
+    'root'     : '/api/v' + REST[ 'version' ] + '/',
     'features' : [ 'auth', 'bib' ]
     }
 
+def API_URL( tail ):
+    return 'http://' + REST['host'] + ':' + REST['port'] + API[ 'root' ] + tail
 
 HOME = '/home/jwindley/src/Franklin/'
 
