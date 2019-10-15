@@ -17,7 +17,7 @@ def login():
     return { 'user' : 'foo', 'token' : 'foo' }
 
 
-@responder.route( API.route( '/auth/tokens' ), methods = [ 'GET' ] )
+@responder.route( API.route( 'auth/tokens' ), methods = [ 'GET' ] )
 @API.to_json
 @API.errno
 def tokens():
@@ -25,8 +25,8 @@ def tokens():
     return { 'tokens' : [] }
 
 
-@responder.route( API.route( '/auth/token/<t>' ), methods = [ 'GET', 'DELETE' ] )
+@responder.route( API.route( 'auth/token/<t>' ), methods = [ 'GET', 'DELETE' ] )
 @API.to_json
 @API.errno
-def show_or_edit_token():
+def show_or_edit_token( t ):
     return { 'token' : t }
