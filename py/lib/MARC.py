@@ -1,12 +1,12 @@
-#!/usr/bin/env python
-# -----------------------------------------------------------------------
+#!/usr/bin/env python3
+"""
 #  File:              TAG( MARC.py )
 #  Description:       MARC 21 tags and records
 #  Author:            Jay Windley <jwindley>
 #  Created:           Thu May  2 13:01:34 2013
 #  Copyright:         (c) 2013 Jay Windley
 #                     All rights reserved.
-# -----------------------------------------------------------------------
+"""
 
 from datetime import datetime
 import re
@@ -24,16 +24,15 @@ class MARC_fieldlist( list ):
 
     def __len__( self ):
         """
-        Override len() function to return the length of the included
-        subfield list.
+        Override len() function to return the length of the included subfield list.
         """
         return len( self.fields )
 
 
     def __getitem__( self, code ):
         """
-        Override subscription operator.  Find the first occurrence of
-        <code> and return its associated value.
+        Override subscription operator.  Find the first occurrence of <code> and return its associated
+        value.
         """
         val = None
         for f in self.fields:
@@ -48,12 +47,9 @@ class MARC_fieldlist( list ):
 
     def __setitem__( self, code, val ):
         """
-        Find first instance of <code> and set it to val, which obviously
-        isn't likely to do the right thing if there is more than one
-        occurrence.  Otherwise append a new value onto it, which isn't
-        likely to do the right thing either since tags have imposed
-        order.
-        
+        Find first instance of <code> and set it to val, which obviously isn't likely to do the right
+        thing if there is more than one occurrence.  Otherwise append a new value onto it, which
+        isn't likely to do the right thing either since tags have imposed order.
         """
         for i in range( len( self.fields ) ):
             if self.fields[ i ][ 0 ] == code:
@@ -67,7 +63,7 @@ class MARC_fieldlist( list ):
             self.fields = fields
             self.pos = 0
         def next( self ):
-            """returns the tuple ( <code>, <val> ) in sequence."""
+            """ Returns the tuple ( <code>, <val> ) in sequence. """
             try:
                 val = self.fields[ self.pos ]
                 self.pos += 1
@@ -78,20 +74,15 @@ class MARC_fieldlist( list ):
 
     def __iter__( self ): return self.iterator( self.fields )
 
-    
+
     def getall( self, code ):
-        """
-        Get all instances of a subfield code in order, as an ordered
-        list of values.
-        """
+        """Get all instances of a subfield code in order, as an ordered list of values."""
         matches = [ f[1] for f in self.fields if f[0] == code ]
         return matches
 
 
     def __str__( self ):
-        """
-        Return the canonical string representation of the field list.
-        """
+        """ Return the canonical string representation of the field list. """
         return ''.join(
             [ self.fld_delim + f[0] + f[1].encode( 'utf-8' )
               for f in self.fields ]
@@ -99,17 +90,14 @@ class MARC_fieldlist( list ):
 
 
     def append( self, code, val ):
-        """
-        Append the subfield <code> and <val> to the present list.
-        """
+        """ Append the subfield <code> and <val> to the present list. """
         self.fields.append( ( code, val ) )
 
 
     def join( self, sep = ' ', fields = [] ):
         """
-        Return a string composed of subfield code values in <fields>
-        (defaults to all codes in the tag) joined by <sep>.  Undefined
-        subfield codes are ignored.  Returns the empty string if no
+        Return a string composed of subfield code values in <fields> (defaults to all codes in the tag)
+        joined by <sep>.  Undefined subfield codes are ignored.  Returns the empty string if no
         subfields in <fields> (either default or explicit) are defined.
         """
         # if no subfield codes specified, construct a list of all
@@ -123,8 +111,8 @@ class MARC_fieldlist( list ):
         vals = []
         for code in fields:
             try: vals.append( self[ code ] )
-            except KeyError: continue                
-        if len( vals ) > 0:            
+            except KeyError: continue
+        if len( vals ) > 0:
             return sep.join( vals )
         else:
             return ''
@@ -132,7 +120,7 @@ class MARC_fieldlist( list ):
 
 
 class MARC_tag( object ):
-    
+
     def __init__( self,
                   tag = '000',
                   ind = '  ',
@@ -151,27 +139,25 @@ class MARC_tag( object ):
 
     def join( self, sep = ' ', fields = [] ):
         """
-        Return the value of the tag as a string, separated by <sep> as
-        in classical join().  If a tag has more than one of the same
-        subfield, all matching subfields are included in order.
+        Return the value of the tag as a string, separated by <sep> as in classical join().  If a tag
+        has more than one of the same subfield, all matching subfields are included in order.
         """
         return self.fields.join( sep, fields )
 
-    
+
     def parse_canonical_string( self, s ):
         """
-        Take string <s> as a canonical line-oriented representation of
-        the MARC tag, where the line is fixed-field as
+        Take string <s> as a canonical line-oriented representation of the MARC tag, where the line is
+        fixed-field as
 
             TTT_II_|xAAAAAAAAAAA
 
-        where TTT is the three-character, zero-padded tag number, II is
-        the two-character, space-padded indidcators, | is the ostensible
-        subfield delimiter, and x is the subfield code letter.
+        where TTT is the three-character, zero-padded tag number, II is the two-character,
+        space-padded indidcators, | is the ostensible subfield delimiter, and x is the subfield code
+        letter.
 
-        Any text following the subfield code letter is part of the
-        subfield value.  Assign tag, indicator, and fields as
-        appropriate.
+        Any text following the subfield code letter is part of the subfield value.  Assign tag,
+        indicator, and fields as appropriate.
         """
         self.tag   = s[:3]
         self.ind   = s[4:6]
@@ -193,17 +179,16 @@ class MARC_tag( object ):
 
     def ord( self ):
         """
-        Return a number expressing the unique position of this tag in
-        the ordered sequence of tags in the record.
+        Return a number expressing the unique position of this tag in the ordered sequence of tags in
+        the record.
         """
         return int( self.tag + str( self.seq ) )
 
 
     def __str__( self ):
         """
-        The string representation is the canonical MARC one-line
-        representation of the tag.  See parse_canonical_string() for the
-        details of the format.
+        The string representation is the canonical MARC one-line representation of the tag.  See
+        parse_canonical_string() for the details of the format.
         """
         return "%03s %02s %s" % (
             self.tag[0:3],
@@ -225,9 +210,8 @@ class MARC_record( object ):
 
     def __init__( self, data = '' ):
         """
-        If s is non-empty, it is assumed to be a canonical string
-        representation of the record: tags are separated by the newline
-        and LDR is the first tag, the MARC 21 leader.
+        If s is non-empty, it is assumed to be a canonical string representation of the record: tags are
+        separated by the newline and LDR is the first tag, the MARC 21 leader.
         """
         self.leader     = '';   # MARC 21 leader
         self.ctl_fields = {}    # Control fields, 00X tags
@@ -245,11 +229,11 @@ class MARC_record( object ):
         #        because 003 isn't always there.
         return self.find( '040' ).fields['a'] + self.ctl_fields['001']
 
-    
+
     def tl_deref( self, specs ):
         """
-        Dereference the given tag list and return the joined string
-        expressing it, or the empty string if none of the tags match.
+        Dereference the given tag list and return the joined string expressing it, or the empty string
+        if none of the tags match.
         """
         s = ''
         for spec in specs:
@@ -259,36 +243,33 @@ class MARC_record( object ):
                 return t.join( fields = fields )
         return s
 
-    
+
     def split_spec( self, spec ):
-        """
-        For the given spec string, return the tag and a field list.
-        """
+        """ For the given spec string, return the tag and a field list. """
         fields = []
         map( fields.extend, spec[3:] )
         return spec[:3], fields
 
 
     def cite( self ):
-        """Return the MLA format citation string for this work."""
+        """ Return the MLA format citation string for this work. """
         return "%s %s. (%s)." % ( self.author(),
                                   self.title(),
                                   self.imprint() )
 
-    
+
     def update_timestamp( self ):
         """
-        Update the 005 control field (Date and Time of Last Transaction)
-        with the current date and time.
+        Update the 005 control field (Date and Time of Last Transaction) with the current date
+        and time.
         """
         self.ctl_fields[ '005' ] = datetime.now().strftime(
             '%Y%m%d%H%M%S'
             ) + '.0'
-        
+
     def parse_canonical_string( self, s ):
         """
-        The canonical string representation is one tag per line, with
-        the leader as the first line.
+        The canonical string representation is one tag per line, with the leader as the first line.
         """
         lines = s.split( "\n" )
         if lines is None:
@@ -302,7 +283,7 @@ class MARC_record( object ):
             except KeyError:
                 self.seqs[ line[:3] ] = 1
             seq = self.seqs[ line[:3] ]
-            
+
             # Leader
             if line[:3] == 'LDR':
                 self.leader = line[7:].rstrip()
@@ -319,8 +300,8 @@ class MARC_record( object ):
 
     def find( self, key, seq = 1 ):
         """
-        Find the seq'th occurrence of tag <key> in the record and return
-        its tag object.  Returns None if no such tag is in the record.
+        Find the seq'th occurrence of tag <key> in the record and return its tag object.  Returns None
+        if no such tag is in the record.
         """
         for t in self.tags:
             if t.tag == key and t.seq == seq:
@@ -330,9 +311,8 @@ class MARC_record( object ):
 
     def filter( self, key ):
         """
-        Find all the occurrences of tag <key> in the record and return a
-        list of the associated tag objects.  Returns empty list if no
-        such tag(s) are in the record.
+        Find all the occurrences of tag <key> in the record and return a list of the associated tag
+        objects.  Returns empty list if no such tag(s) are in the record.
         """
         results = []
         for t in self.tags:
@@ -354,10 +334,9 @@ class MARC_record( object ):
 
     def __str__( self ):
         """
-        String representation is the canonical string representation of
-        each tag in ordinal valu] e.  The MARC leader is given the LDR
-        tag.  Coerces the tag delimiter to be the record-scoped field
-        delimiter.  Individual tags are separated by the newline.
+        String representation is the canonical string representation of each tag in ordinal value.
+        The MARC leader is given the LDR tag.  Coerces the tag delimiter to be the record-scoped
+        field delimiter.  Individual tags are separated by the newline.
         """
         MARC_tag.fld_delim = MARC_record.fld_delim
         s = 'LDR    ' + self.leader + "\n"
@@ -367,16 +346,16 @@ class MARC_record( object ):
             s += t.__str__() + "\n"
         return s.rstrip()
 
-    
+
     def digest( self ):
         return hashlib.md5( self.__str__() ).hexdigest()
 
 
     class iterator():
         """
-        Iterate over tags (but not control fields).  State is maintained
-        by a list of indices into self.tags, presented in tag-sorted
-        order.  The local index is an index into that list of indices.
+        Iterate over tags (but not control fields).  State is maintained by a list of indices into
+        self.tags, presented in tag-sorted order.  The local index is an index into that list of
+        indices.
         """
         def __init__( self, rec ):
             self.rec = rec
@@ -388,7 +367,7 @@ class MARC_record( object ):
             # list-comprehensively, then sorted according to the tag
             # values combined with sequence numbers as in TTTS.
             #
-            
+
             self.indices = sorted(
                 [ i for i in xrange( len( self.rec.tags ) ) ],
                 key = lambda i: int(
