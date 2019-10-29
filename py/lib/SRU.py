@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""
 # -----------------------------------------------------------------------
 #  File:              TAG( SRU.py )
 #  Description:       SRU query for bibliographic entry
@@ -8,7 +7,7 @@
 #  Copyright:         (c) 2013 Jay Windley
 #                     All rights reserved.
 # -----------------------------------------------------------------------
-"""
+"""Search/Retrieval via URL (SRU) interface to Library of Congress"""
 
 import re
 import urllib
@@ -16,16 +15,13 @@ import http.client
 
 import config
 
-#***********************************************************************
-#
-#  SRU bibliographic query.
-#
-#     Wraps a URL for LoC SRU (Search/Retrieve via URL) query.
-#     Construct the object, set additional terms using
-#     Query.set_terms(), adjust the Boolean junction (AND or OR) with
-#     Query.junction, and run the query via Query.submit().
-#
-class Query( object ):
+
+class query( object ):
+    """Wraps a URL for LoC SRU (Search/Retrieve via URL) query. Construct the object, set additional
+    terms usinq query.set_terms(), adjust the Boolean junction (AND or OR) with query.junction, and
+    run the query via Query.submit().
+
+    """
 
     # SRU keys mapped from built-in keys.  Pass a dictionary with the
     # left-hand-side labels as (logical) keys and the values as search
@@ -41,11 +37,12 @@ class Query( object ):
         'key'      : 'bath.any'
         }
 
-    #-------------------------------------------------------------------
-    # Initialize the members with the config defaults.  If args is
-    # given as a dictionary, add the terms.
-    #
+
     def __init__( self, args = None ):
+        """Initialize the members with the config defaults.  If args is given as a dictionary, add the
+        terms.
+
+        """
         self.host     = config.SRU['host']
         self.port     = config.SRU['port']
         self.path     = config.SRU['path']
@@ -59,12 +56,11 @@ class Query( object ):
         self.set_terms( args )         # ...then selectively set them.
 
 
-    #-------------------------------------------------------------------
-    # Set the search terms.  Whatever keys are set in <args> are
-    # written into the built-in search terms.  If args is None, the
-    # search terms are reset.
-    #
     def set_terms( self, args = None ):
+        """Set the search terms.  Whatever keys are set in <args> are written into the built-in search
+        terms.  If args is None, the search terms are reset.
+
+        """
         if args is None:
             self.terms = {
                 'title'  : None,
@@ -79,12 +75,9 @@ class Query( object ):
                 self.terms[ k ] = args[ k ]
 
 
-    #-------------------------------------------------------------------
-    # Encode the object properties as an SRU encoded CGI argument
-    # string.
-    #
     def CGI_args( self ):
         """URL-encode the SRU request properties"""
+
         CGI = {
             'operation'      : self.op,
             'version'        : self.version,
@@ -95,10 +88,9 @@ class Query( object ):
         return urllib.parse.urlencode( CGI )
 
 
-    #-------------------------------------------------------------------
-    # Add up all the defined search terms into a CGI substring.
-    #
     def terms_str( self ):
+        """Add up all the defined search terms into a CGI substring."""
+
         strs = []
         for k in self.terms.keys():
 
@@ -121,11 +113,10 @@ class Query( object ):
                                          self.terms[ k ] ) )
         return self.junction.join( strs )
 
-    #-------------------------------------------------------------------
-    # Submit the embodied query and return the result.
-    #
+
     def submit( self ):
         """Submit an SRU request and return its answer"""
+
         conn = http.client.HTTPConnection( host    = self.host,
                                            port    = self.port,
                                            timeout = self.timeout )
@@ -138,11 +129,9 @@ class Query( object ):
         return data
 
 
-    #-------------------------------------------------------------------
-    # Return the query as a full URL with CGI arguments properly
-    # encoded.
-    #
     def __str__( self ):
+        """Return the query as a full URL with CGI arguments properly encoded."""
+
         return 'http://{host}:{port}{path}?{args}'.format(
             host = self.host,
             port = self.port,
@@ -162,16 +151,14 @@ Number searches (ISBN, ISSN, LCCN, etc.):
            should be "91000013" in the search term.
 '''
 
-#-----------------------------------------------------------------------
-# Return the Bath-canonical ISBN/ISSN for the given loosely-specified
-# ISBN/ISSN.
-#
-#   - Remove internal punctuation
-#   - Recognize and pass EAN-13 formats
-#   - Pad with leading zeros to 10 digits if needed
-#
 def normalize_ISxN( num ):
-    """Normalize an ISBN or ISSN"""
+    """Return the Bath-canonical ISBN/ISSN for the given loosely-specified ISBN/ISSN.
+
+    - Remove internal punctuation
+    - Recognize and pass EAN-13 formats
+    - Pad with leading zeros to 10 digits if needed
+
+    """
     if num is None: return None
     num = num.replace( '-', '' )
     if re.match( r'^978', num ) is not None:
@@ -181,18 +168,15 @@ def normalize_ISxN( num ):
     return num
 
 
-#-----------------------------------------------------------------------
-# Return the Bath-canonical LCCN for the given loosely-specified LCCN.
-# Canonical form is 8 digits
-#
-#    YYSSSSSS
-#
-# where YY means the year, which appears before the dash '-', and the
-# remainder SSSSSS is the zero-padded serial number of the catalog
-# number.
-#
 def normalize_LCCN( LCCN ):
-    """Normalize a LCCN"""
+    """Return the Bath-canonical LCCN for the given loosely-specified LCCN. Canonical form is 8 digits
+
+       YYSSSSSS
+
+    where YY means the year, which appears before the dash '-', and the remainder SSSSSS is the
+    zero-padded serial number of the catalog number.
+
+    """
     if LCCN is None: return None
     parts = LCCN.split( '-' )
     if len( parts ) == 1:
