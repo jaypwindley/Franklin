@@ -144,6 +144,17 @@ class reader_writer( reader ):
         self.commit()
 
 
+    def delete( self, table: str, keyname: str, keyvalue: str ):
+        """Delete the row having the given kay value for the given key name"""
+        self.execute(
+            "DELETE FROM {table} WHERE `{name}` = '{vale}';".format(
+                table = table,
+                name  = keyname
+                value = keyvalue ) )
+        self.commit()
+
+
+
     def commit( self ):
         """Commit any pending transactions."""
         self.db.commit()
