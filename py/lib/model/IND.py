@@ -8,10 +8,12 @@
 #                     All rights reserved.
 #-------------------------------------------------------------------------------
 
-from kwargable import kwargable
+import sys
+sys.path.append( '..' )
+from misc import kwargable as kw
 
 
-class IND( kwargable ):
+class IND( kw.kwargable ):
     """Base class for any of several objects that consist of (or include) an ID, a name, and a
     description.
 
