@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""
 # -----------------------------------------------------------------------
 #  File:              config.py
 #  Description:       Installation dependent configuration
@@ -8,7 +7,7 @@
 #  Copyright:         (c) 2013 Jay Windley
 #                     All rights reserved.
 # -----------------------------------------------------------------------
-"""
+"""Runtime configuration"""
 
 DEBUG = 0
 
