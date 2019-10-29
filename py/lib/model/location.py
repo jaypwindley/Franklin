@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -----------------------------------------------------------------------
-#  File:              Location.py
-#  Description:       Franklin Location objects
+#  File:              location.py
+#  Description:       Franklin location objects
 #  Author:            Jay Windley <jwindley>
 #  Created:           Fri Apr 17 23:19:49 2015
 #  Copyright:         (c) 2015 Jay Windley
@@ -11,40 +11,34 @@
 
 from IND import IND
 
-#***********************************************************************
-#
-#  Location Access Policy (LAP) object.  This is a direct mapping from
-#  the data store, and is a strict ID-Name-Description object.
-#
-#  The LAP object determines the degress of restriction that apply to a
-#  location.
-#
-#***********************************************************************
-class Location_Access_Policy( IND ): pass
+class access_policy( IND ):
+    """Location Access Policy object.  This is a direct mapping from the data store, and is a strict
+    ID-Name-Description object.
+
+    This object determines the degrees of restriction that apply to a location.
+
+    """
+    pass
 
 
 
-#***********************************************************************
-#
-#  Shelving Scheme (SS) object.  This is a direct mapping from the data
-#  store, and is a string ID-Name-Description object.
-#
-#  The SS object determines the order of arrangement of the Items in the
-#  shelving location, such as by classification or for display.
-#
-#***********************************************************************
-class Shelving_Scheme( IND ): pass
+class shelving_scheme( IND ):
+    """Shelving scheme object.  This is a direct mapping from the data store, and is a string
+    ID-Name-Description object.
+
+    The shelving scheme object determines the order of arrangement of the Items in the shelving
+    location, such as by classification or for display.
+
+    """
+    pass
 
 
+class location( IND ):
+    """Physical location of Item at the gross geographical level.  Refers typically to a building or
+    other visitable location reckoned in city addressing.
 
-#***********************************************************************
-#
-#  Physical location of Item at the gross geographical level.  Refers
-#  typically to a building or other visitable location reckoned in city
-#  addressing.
-#
-#***********************************************************************
-class Location( IND ):
+    """
+
     def __init__( self, **kwargs ):
         self.address1                   = ''      #
         self.address2                   = ''      #  ordinary city
@@ -57,32 +51,29 @@ class Location( IND ):
         self.geo_long                   = 0       #
 
                                                   #  default access
-        self.Location_Access_Policy     = None    #  policy unless
+        self.access_policy              = None    #  policy unless
                                                   #  overridden
 
-        self.Location_Access_Policy_ID  = None
+        self.access_policy_ID  = None
 
         super( Location, self ).__init__( **kwargs )
 
-    def access_policy( self ):
+    def get_access_policy( self ):
         if self.Location_Access_Policy is not None:
             return self.Location_Access_Policy
 
 
+class sublocation( IND ):
+    """Physical sub-location of Item at a fine geographical level.  Refers typically to a room or area
+    within a single physical street address.
 
-#***********************************************************************
-#
-#  Physical sub-location of Item at a fine geographical level.  Refers
-#  typically to a room or area within a single physical street address.
-#
-#***********************************************************************
-class Sublocation( IND ):
+    """
     def __init__( self, **kwargs ):
 
-        self.Location                   = None    #  parent location
-        self.Location_Access_Policy     = None    #  overrides parent
+        self.location                   = None    #  parent location
+        self.access_policy              = None    #  overrides parent
 
-        self.Location_ID                = None
+        self.location_ID                = None
         self.Location_Access_Policy_ID  = None
 
         super( Sublocation, self ).__init__( **kwargs )
@@ -95,14 +86,10 @@ class Sublocation( IND ):
         return None
 
 
+class hhelving_location( IND ):
+    """Physical shelving of Item within its sublocation, such as a specific shelving unit or area within
+    a single room."""
 
-#***********************************************************************
-#
-#  Physical shelving of Item within its sublocation, such as a specific
-#  shelving unit or area within a single room.
-#
-#***********************************************************************
-class Shelving_Location( IND ):
     def __init__( self, **kwargs ):
 
         self.Sublocation                = None    #  parent sublocation
@@ -123,9 +110,7 @@ class Shelving_Location( IND ):
         return None
 
 
-
-
-class Item_Location( object ):
+class item_location( object ):
     def __init__( self, **kwargs ):
         self.Location           = None
         self.Sublocation        = None

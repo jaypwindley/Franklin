@@ -1,21 +1,16 @@
-#!/usr/bin/env python
-"""
+#!/usr/bin/env python3
 # -----------------------------------------------------------------------
-#  File:              Item.py
+#  File:              item.py
 #  Description:       Franklin Item for holdings
 #  Author:            Jay Windley <jwindley>
 #  Created:           Sun Mar  8 19:59:26 2015
 #  Copyright:         (c) 2015 Jay Windley
 #                     All rights reserved.
 # -----------------------------------------------------------------------
-"""
+"""Item and notes for holdings"""
 
-#***********************************************************************
-#
-#  
-#
-#***********************************************************************
-class Item( object ):
+
+class item( object ):
 
     def __init__( self, *args, **kwargs ):
         self.ID                  = None
@@ -29,13 +24,7 @@ class Item( object ):
         self.notes = []
 
 
-
-#***********************************************************************
-#
-#  
-#
-#***********************************************************************
-class Note( object ):
+class note( object ):
 
     def __init__( self, *args, **kwargs ):
         self.ID         = None
@@ -46,13 +35,7 @@ class Note( object ):
         self.actions    = {}
 
 
-
-#***********************************************************************
-#
-#  
-#
-#***********************************************************************
-class Action( object ):
+class action( object ):
 
     def __init__( self ):
         self.timestamp = None
