@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-"""
+#!/usr/bin/env python3
 # -----------------------------------------------------------------------
 #  File:              Location.py
 #  Description:       Franklin Location objects
@@ -8,7 +7,7 @@
 #  Copyright:         (c) 2015 Jay Windley
 #                     All rights reserved.
 # -----------------------------------------------------------------------
-"""
+"""Locations for shelving"""
 
 from IND import IND
 
@@ -54,7 +53,7 @@ class Location( IND ):
         self.ZIP                        = ''      #
 
                                                   #
-        self.geo_lat                    = 0       #  GIS addressing        
+        self.geo_lat                    = 0       #  GIS addressing
         self.geo_long                   = 0       #
 
                                                   #  default access
@@ -62,7 +61,7 @@ class Location( IND ):
                                                   #  overridden
 
         self.Location_Access_Policy_ID  = None
-        
+
         super( Location, self ).__init__( **kwargs )
 
     def access_policy( self ):
@@ -70,7 +69,7 @@ class Location( IND ):
             return self.Location_Access_Policy
 
 
-        
+
 #***********************************************************************
 #
 #  Physical sub-location of Item at a fine geographical level.  Refers
@@ -79,7 +78,7 @@ class Location( IND ):
 #***********************************************************************
 class Sublocation( IND ):
     def __init__( self, **kwargs ):
-        
+
         self.Location                   = None    #  parent location
         self.Location_Access_Policy     = None    #  overrides parent
 
@@ -96,7 +95,7 @@ class Sublocation( IND ):
         return None
 
 
-        
+
 #***********************************************************************
 #
 #  Physical shelving of Item within its sublocation, such as a specific
@@ -105,7 +104,7 @@ class Sublocation( IND ):
 #***********************************************************************
 class Shelving_Location( IND ):
     def __init__( self, **kwargs ):
-        
+
         self.Sublocation                = None    #  parent sublocation
         self.Shelving_Scheme            = None    #  shelving schema
         self.Location_Access_Policy     = None    #  overrides parent
@@ -134,4 +133,3 @@ class Item_Location( object ):
 
     def access_policy( self ):
         return self.Shelving_Location.access_policy()
-
