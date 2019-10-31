@@ -44,7 +44,7 @@ class base( ABC ):
         pass
 
     @abstractmethod
-    def update( self, str, obj, ID = None ):
+    def update( self, obj, ID = None ):
         """Update the object in the persistent store.  If the ID is specified, it is the primary key of the
         object to be updated.  Otherwise the implementation may derive the primary key from th e
         object.  Raises exception 'not_found' if the object doesn't exist in the persistent store.
