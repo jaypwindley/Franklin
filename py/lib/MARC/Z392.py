@@ -20,7 +20,7 @@
 """
 
 import base64
-import MARC
+from MARC import MARC
 
 FT = '\x1E'        # field terminator   : after each tag data sequence
 US = '\x1F'        # unit separator     : between tag subfields
