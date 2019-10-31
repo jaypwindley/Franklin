@@ -12,30 +12,52 @@
 
 from abc import ABC, abstractmethod
 
+class duplicate( Exception ):
+    """ Create called on existing object """
+    pass
+
+class not_found( Exception ):
+    """ Object not found """
+    pass
+
+
+class
 class base( ABC ):
     """Readers and writers for Model objects must implmement the following operations."""
 
     @abstractmethod
-    def create( self, values: dict, ID = '' ):
-        """ Save a new object having the given values, optionally under the given ID"""
+    def create( self, obj, ID = None ):
+        """Create a new object in the persistent store.  Return the primary key ID of the newly-created
+        object.  If ID is specified, it must be used as the primary key of the object.  Otherwise
+        the primary key ID is derived from the object by the implementation.  Raises exception
+        'duplicate' if the object already exists in the persistent store.
+
+        """
         pass
 
     @abstractmethod
-    def read( self, ID: str ) -> dict:
-        """ Read the object having the given ID. """
+    def read( self, ID: str ):
+        """Read from the persistsent store the object having the given ID. Raise not_found if the object
+        doesn't exist in the persistent store.
+
+        """
         pass
 
     @abstractmethod
-    def read_field( self, ID: str, field: str ) -> str:
-        """ Read the named field from the object having the given ID. """
-        pass
+    def update( self, str, obj, ID = None ):
+        """Update the object in the persistent store.  If the ID is specified, it is the primary key of the
+        object to be updated.  Otherwise the implementation may derive the primary key from th e
+        object.  Raises exception 'not_found' if the object doesn't exist in the persistent store.
+        The implementation may selectively update only the portions of the persistent store that it
+        detects have changed.
 
-    @abstractmethod
-    def update( self, ID: str, values: dict ):
-        """ Update the object having the given ID using the given values (need not be complete)"""
+        """
         pass
 
     @abstractmethod
     def delete( self, ID: str ):
-        """ Delete the object having the given ID """
+        """Delete the object having the given ID.  Raises not_found if the object having the given ID is
+        not found inthe persistent store.
+
+        """
         pass
