@@ -9,10 +9,7 @@
 # -----------------------------------------------------------------------
 """Library staff"""
 
-from IND import IND
-
-import sys
-sys.path.append( '..' )
+from misc import IND
 from misc import kwargable as kw
 
 class staff( kw.kwargable ):

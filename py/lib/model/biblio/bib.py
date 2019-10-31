@@ -9,9 +9,6 @@
 # -----------------------------------------------------------------------
 """Bibliographic record, wrapper around MARC record"""
 
-import sys
-sys.path.append( '..' )
-
 from MARC import MARC
 
 class bib( MARC.record ):

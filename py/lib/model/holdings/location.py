@@ -9,7 +9,7 @@
 # -----------------------------------------------------------------------
 """Locations for shelving"""
 
-from IND import IND
+from misc.IND import IND
 
 class access_policy( IND ):
     """Location Access Policy object.  This is a direct mapping from the data store, and is a strict
