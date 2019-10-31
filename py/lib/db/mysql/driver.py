@@ -38,7 +38,7 @@ class reader( base ):
     """Read-only access to database"""
 
     def __init__( self, conn_data: dict ):
-        super( reader, self ).__init__( **kwargs )
+        super( reader, self ).__init__( conn_data )
 
     def single_value( self, query: str ):
         """Return a single value that is the single row and single column resulting from the given
@@ -103,7 +103,7 @@ class reader_writer( reader ):
     """Read-write access to database"""
 
     def __init__( self, conn_data: dict ):
-        super( reader_writer, self ).__init__( **kwargs )
+        super( reader_writer, self ).__init__( conn_data )
 
     def add_dict( self, table: str, dict: dict ):
         """Add a dictionary to the given table where the dictionary indices are column names and the
@@ -124,12 +124,12 @@ class reader_writer( reader ):
         self.commit()
 
 
-    def update_dict( self, table: str, dict: dict, key: str ):
+    def update_dict( self, table: str, values: dict, key: str ):
         """Update a row in the table according to the given dictionary, whose keys are the column names and
         key is the primary key column name.
 
         """
-        indices = dict.keys()
+        indices = values.keys()
         self.execute(
             "UPDATE {table} SET {assigns} WHERE `{key}` = '{val}';".format(
                 table = table,
@@ -137,19 +137,19 @@ class reader_writer( reader ):
                     lambda idx:
                        "`{col}`='{val}'".format(
                            col = idx,
-                           val = self.esc( dict[ idx ] ) ),
+                           val = self.esc( values[ idx ] ) ),
                     indices ) ),
                 key = key,
-                val = dict[ key ] ) )
+                val = values[ key ] ) )
         self.commit()
 
 
     def delete( self, table: str, keyname: str, keyvalue: str ):
         """Delete the row having the given kay value for the given key name"""
         self.execute(
-            "DELETE FROM {table} WHERE `{name}` = '{vale}';".format(
+            "DELETE FROM {table} WHERE `{name}` = '{value}';".format(
                 table = table,
-                name  = keyname
+                name  = keyname,
                 value = keyvalue ) )
         self.commit()
 
