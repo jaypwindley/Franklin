@@ -25,8 +25,8 @@ class staff( kw.kwargable ):
         super( staff, self ).__init__( **kwargs )
 
 
-class department( IND ):
+class department( IND.IND ):
     """Departments in which staff are organized"""
     def __init__( self, **kwargs ):
-        self.location    = ''
+        self.location_ID = ''
         super( department, self ).__init__( **kwargs )
