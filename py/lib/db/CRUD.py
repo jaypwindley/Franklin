@@ -21,7 +21,6 @@ class not_found( Exception ):
     pass
 
 
-class
 class base( ABC ):
     """Readers and writers for Model objects must implmement the following operations."""
 
