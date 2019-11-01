@@ -4,11 +4,10 @@ from flask import Flask
 import sys
 
 import license
+import config
 
-sys.path.append( '../lib' )
 sys.path.append( './blueprints' )
 
-import config
 
 app = Flask( __name__ )
 
