@@ -55,17 +55,14 @@ def get_prompted_input( prompt ):
     return val
 
 
-def LC_search( args_dict ):
+def LC_search( args_dict ) -> list:
     query = SRU.query( args_dict )
     query.max_recs = 25;
-    XML_data = query.submit()
-    records = XML.parse_str( XML_data )
-    bibs = []
-    for i in range( len( records ) ):
+    def downcast( m ):
         b = bib()
-        b.__dict__ = records[ i ].__dict__
-        bibs.append( b )
-    return bibs
+        b.__dict__ = m.__dict__;
+        return b
+    return list( map( downcast, XML.parse_str( query.submit() ) ) )
 
 
 def select_record( records, prompt_detail ):
