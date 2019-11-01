@@ -34,13 +34,13 @@ USE franklin;
 -- The list of available access policies for some particular location.  May be used by locations,
 -- sublocations, and individual shelving locations.
 --
-CREATE TABLE IF NOT EXISTS `location_access_policy` (
+CREATE TABLE IF NOT EXISTS `access_policy` (
    ID            CHAR              PRIMARY KEY NOT NULL,
    name          VARCHAR(32),
    description   VARCHAR(128)
 ) ENGINE = `InnoDB`;
 
-INSERT INTO `location_access_policy` VALUES
+INSERT INTO `access_policy` VALUES
    ( 'N', 'None',       'Staff access only' ),
    ( 'R', 'Restricted', 'Requires staff approval or supervision' ),
    ( 'O', 'Open',       'Publicly accessible' );
@@ -66,10 +66,10 @@ CREATE TABLE IF NOT EXISTS `location` (
    geo_long      FLOAT,
 
    -- Default access for this location.  Sublocation may override.
-   location_access_policy_ID CHAR NOT NULL DEFAULT 'O',
+   access_policy_ID CHAR NOT NULL DEFAULT 'O',
 
-   FOREIGN KEY `access` ( `location_access_policy_ID` )
-      REFERENCES `location_access_policy` ( `ID` )
+   FOREIGN KEY `access` ( `access_policy_ID` )
+      REFERENCES `access_policy` ( `ID` )
       ON DELETE RESTRICT
       ON UPDATE CASCADE
 
@@ -86,14 +86,14 @@ CREATE TABLE IF NOT EXISTS `sublocation` (
    description   VARCHAR(128),
 
    -- Default access for this sublocation.  Shelving may override.
-   location_access_policy_ID CHAR,
+   access_policy_ID CHAR,
 
    FOREIGN KEY ( `location_ID` ) REFERENCES `location` ( `ID` )
       ON DELETE RESTRICT
       ON UPDATE CASCADE,
 
-   FOREIGN KEY ( `location_access_policy_ID` )
-      REFERENCES `location_access_policy` ( `ID` )
+   FOREIGN KEY ( `access_policy_ID` )
+      REFERENCES `access_policy` ( `ID` )
       ON DELETE SET NULL
       ON UPDATE CASCADE
 
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `shelving_location` (
    description                VARCHAR(128),
 
    shelving_scheme_ID         CHAR(8),
-   location_access_policy_ID  CHAR,
+   access_policy_ID  CHAR,
 
    FOREIGN KEY ( `sublocation_ID` ) REFERENCES `sublocation` ( `ID` )
      ON DELETE SET NULL
@@ -138,8 +138,8 @@ CREATE TABLE IF NOT EXISTS `shelving_location` (
      ON DELETE SET NULL
      ON UPDATE CASCADE,
 
-   FOREIGN KEY ( `location_access_policy_ID` )
-     REFERENCES `location_access_policy` ( `ID` )
+   FOREIGN KEY ( `access_policy_ID` )
+     REFERENCES `access_policy` ( `ID` )
      ON DELETE SET NULL
      ON UPDATE CASCADE
 
