@@ -12,10 +12,10 @@
 import os
 import sys
 
-from misc.switch  import switch
-from db           import CRUD
-from MARC         import MARC
-from db           import mysql
+from misc.switch          import switch
+from db                   import CRUD
+from MARC                 import MARC
+from db.mysql             import driver
 
 
 class MARC( CRUD.base ):
@@ -25,7 +25,7 @@ class MARC( CRUD.base ):
         # @todo Does this need to access a global pool of database connections?
         # Attempt to connect to database.
         conn_data['db'] = 'franklin'
-        self.db = mysql.driver( self, conn_data )
+        self.db = driver.reader_writer( conn_data )
 
 
     def create( self, obj: MARC.record, ID = None ):
