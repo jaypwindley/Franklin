@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""
 # -----------------------------------------------------------------------
 #  File:              lclookup.py
 #  Description:       LC catalog lookup and store
@@ -8,27 +7,23 @@
 #  Copyright:         (c) 2019 Jay Windley
 #                     All rights reserved.
 # -----------------------------------------------------------------------
-"""
+""" Library of Congress lookup """
 
 import re
 import sys
-import MySQLdb as mdb
-
-sys.path.append( '../lib' )
 
 import config
-import SRU
-import MARC_XML
-from data_bib import data_bib
+import misc.SRU as SRU
 
+from MARC              import XML
+from db.mysql.bib      import bib     as bib_db
+from model.biblio.bib  import bib
 
 db_name = 'franklin'
-db = data_bib( config.CREDENTIALS['database'][db_name] )
-
-XML_parser = MARC_XML.MARC_XML_parser()
+db = bib_db( config.CREDENTIALS['database'][db_name] )
 
 index_regex = re.compile( r'^[\d]{1,2}$' )
-marc_regex = re.compile( r'^m[\d]{1,2}$' )
+MARC_regex = re.compile( r'^m[\d]{1,2}$' )
 
 SRU_keys = {
     'l' : 'LCCN',
@@ -61,11 +56,16 @@ def get_prompted_input( prompt ):
 
 
 def LC_search( args_dict ):
-    query = SRU.Query( args_dict )
+    query = SRU.query( args_dict )
     query.max_recs = 25;
     XML_data = query.submit()
-    records = XML_parser.parse_string( XML_data )
-    return records
+    records = XML.parse_str( XML_data )
+    bibs = []
+    for i in range( len( records ) ):
+        b = bib()
+        b.__dict__ = records[ i ].__dict__
+        bibs.append( b )
+    return bibs
 
 
 def select_record( records, prompt_detail ):
@@ -81,7 +81,7 @@ def select_record( records, prompt_detail ):
         except IndexError:
             pass
         return ''
-    elif marc_regex.match( cmd ):
+    elif MARC_regex.match( cmd ):
         print( records[ int( cmd[ 1: ] ) ] )
     else:
         return cmd
