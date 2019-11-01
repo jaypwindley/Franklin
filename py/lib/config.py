@@ -19,7 +19,8 @@ CREDENTIALS = {
         'franklin': {
             'host': 'kibbles',
             'user': 'biblio',
-            'pass': 'silence_dogood'
+            'pass': 'silence_dogood',
+            'db'  : 'franklin'
             },
         }
     }
