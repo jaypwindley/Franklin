@@ -13,7 +13,7 @@ import os
 import sys
 import xml.etree.ElementTree as ET
 
-import MARC
+from MARC import MARC
 
 # A few decorators to properly qualify the element names in MARC-XML elements.
 def tag( suffix ): return '{http://www.loc.gov/zing/srw/}' + suffix
