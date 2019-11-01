@@ -36,3 +36,9 @@ class bib( MARC.record ):
     def author( self ):     return self.tl_deref( bib.tl_author  )
     def title( self ):      return self.tl_deref( bib.tl_title   ).rstrip( '/ ' )
     def imprint( self ):    return self.tl_deref( bib.tl_imprint ).rstrip( '.' )
+
+    def cite( self ):
+        """Return the MLA format citation string for this work."""
+        return "%s %s. (%s)." % ( self.author(),
+                                  self.title(),
+                                  self.imprint() )
