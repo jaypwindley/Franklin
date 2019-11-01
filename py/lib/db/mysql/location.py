@@ -8,3 +8,10 @@
 #                     All rights reserved.
 # -----------------------------------------------------------------------
 """ MySQL implementation of Location CRUD. """
+
+from db.mysql import IND
+from model.holdings import location
+
+class access_policy( IND.IND ):
+    def __init__( self, conn_data ):
+        super( access_policy, self ).__init__( location.access_policy().__class__, conn_data )
