@@ -18,8 +18,8 @@ class access_policy( IND ):
     This object determines the degrees of restriction that apply to a location.
 
     """
-    pass
-
+    def __init__( self, **kwargs ):
+        super( access_policy, self ).__init__( **kwargs )
 
 
 class shelving_scheme( IND ):
