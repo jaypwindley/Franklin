@@ -252,13 +252,6 @@ class record( object ):
         return spec[:3], fields
 
 
-    def cite( self ):
-        """Return the MLA format citation string for this work."""
-        return "%s %s. (%s)." % ( self.author(),
-                                  self.title(),
-                                  self.imprint() )
-
-
     def update_timestamp( self ):
         """Update the 005 control field (Date and Time of Last Transaction) with the current date and time.
 
@@ -266,6 +259,7 @@ class record( object ):
         self.ctl_fields[ '005' ] = datetime.now().strftime(
             '%Y%m%d%H%M%S'
             ) + '.0'
+
 
     def parse_canonical_string( self, s ):
         """The canonical string representation is one tag per line, with the leader as the first line.
