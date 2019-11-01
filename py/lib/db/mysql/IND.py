@@ -15,17 +15,17 @@ from misc import IND
 
 class IND( CRUD.base ):
 
-    def __init__( self, name: str, conn_data ):
-        self.name = name
-        self.create_type = globals()[ name ];
-        self.db = driver( conn_data )
+    def __init__( self, c, conn_data: dict ):
+        self.table = c.__name__
+        self.create_type = c
+        self.db = driver.reader_writer( conn_data )
 
     def create( self, obj: IND.IND, ID = None ):
-        self.db.add_dict( self.name, obj.__dict__ )
-        return obj[ 'ID' ]
+        self.db.add_dict( self.table, obj.__dict__ )
+        return obj.ID
 
     def read( self, ID: str ):
-        vals = self.db.get_dict_by_ID( self.name, ID )
+        vals = self.db.get_dict_by_ID( self.table, ID )
         obj = self.create_type( **vals )
         return obj
 
