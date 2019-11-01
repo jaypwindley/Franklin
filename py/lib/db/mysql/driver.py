@@ -13,6 +13,7 @@ import os
 import sys
 import string
 import MySQLdb as mdb
+from db.CRUD import not_found, duplicate
 
 def esc( s: str ) -> str:
     """Escape the string for use as a single-quoted value in an INSERT statement."""
@@ -81,11 +82,11 @@ class reader( base ):
 
     def get_dict_by_ID( self, table: str, ID: str ) -> dict:
         """Return a row in dict form from a table having a designated ID field, by the ID."""
-        query = "SELECT * FROM {table} WHERE `ID` = '{ID}';".format(
-            table = table,
-            ID = ID
-            )
-        return self.row_dict( query )[ 0 ]
+        query = "SELECT * FROM {table} WHERE `ID` = '{ID}';".format( table = table, ID = ID )
+        vals = self.row_dict( query )
+        if len( vals ) == 0:
+            raise not_found
+        return vals[ 0 ]
 
 
     def execute( self, query: str ):
@@ -112,16 +113,20 @@ class reader_writer( reader ):
         """
         indices = dict.keys()
         values = dict.values()
-        self.execute(
-            "INSERT INTO {table} ( {indices} ) VALUES ( {values} );"
-            .format(
-                table = table,
-                indices = ', '.join( map( self.esc, indices ) ),
-                values = ', '.join( map(
-                    lambda x:
-                        "'{}'".format( self.esc( x ) ),
-                    values ) ) ) )
-        self.commit()
+        try:
+            self.execute(
+                "INSERT INTO {table} ( {indices} ) VALUES ( {values} );"
+                .format(
+                    table = table,
+                    indices = ', '.join( map( esc, indices ) ),
+                    values = ', '.join( map(
+                        lambda x:
+                        "'{}'".format( esc( x ) ),
+                        values ) ) ) )
+            self.commit()
+
+        except mdb.IntegrityError:
+            raise duplicate
 
 
     def update_dict( self, table: str, values: dict, key: str ):
@@ -137,7 +142,7 @@ class reader_writer( reader ):
                     lambda idx:
                        "`{col}`='{val}'".format(
                            col = idx,
-                           val = self.esc( values[ idx ] ) ),
+                           val = esc( values[ idx ] ) ),
                     indices ) ),
                 key = key,
                 val = values[ key ] ) )
