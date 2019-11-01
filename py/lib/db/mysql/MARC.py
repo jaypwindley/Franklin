@@ -12,10 +12,13 @@
 import os
 import sys
 
+import MySQLdb as mdb
+
 from misc.switch          import switch
 from db                   import CRUD
 from MARC                 import MARC
 from db.mysql             import driver
+from db.mysql.driver      import esc
 
 
 class MARC( CRUD.base ):
@@ -33,7 +36,7 @@ class MARC( CRUD.base ):
             self.insert_leader( obj.ctl_num(), obj.leader )
             self.add_tags( obj )
             return obj.ctl_num()
-        except db.IntegrityError:
+        except mdb.IntegrityError:
             raise CRUD.duplicate
 
 
@@ -395,7 +398,7 @@ class MARC( CRUD.base ):
                     seq     = seq,
                     code    = code,
                     pos     = pos,
-                    val     = self.esc( val ) ) )
+                    val     = esc( val ) ) )
 
     def update_field(
             self,
@@ -418,7 +421,7 @@ class MARC( CRUD.base ):
                     seq     = seq,
                     code    = code,
                     pos     = pos,
-                    val     = self.esc( val ) ) )
+                    val     = esc( val ) ) )
 
     def delete_field(
             self,
@@ -462,7 +465,7 @@ class MARC( CRUD.base ):
                FROM MARC_fields
                WHERE tag = '650' """ )
 
-    def get_all_authors( self ) -> list:
+    def get_all_authorg36s( self ) -> list:
         return self.db.row_array(
             """SELECT ctl_num, tag, val
                FROM MARC_fields
