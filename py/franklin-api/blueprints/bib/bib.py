@@ -5,7 +5,7 @@ sys.path.append( '..' )
 sys.path.append( '../../lib' )
 
 import api_tools as API
-from switch import switch
+from misc.switch import switch
 
 from flask import Blueprint, request
 
