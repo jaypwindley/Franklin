@@ -17,6 +17,7 @@ import misc.SRU as SRU
 
 from MARC              import XML
 from db.mysql.bib      import bib     as bib_db
+from db                import CRUD
 from model.biblio.bib  import bib
 
 db_name = 'franklin'
@@ -37,11 +38,9 @@ def save_record( rec, db ):
     rec.strip_900s()
     rec.update_timestamp()
     try:
-        db.add( rec )
-    except mdb.IntegrityError:
+        db.create( rec )
+    except CRUD.duplicate:
         print( 'Already in catalog' )
-    except mdb.ProgrammingError as e:
-        print( 'SQL_error: {}'.format( e ) )
 
 
 def get_prompted_input( prompt ):
