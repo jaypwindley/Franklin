@@ -14,7 +14,7 @@ import sys
 import string
 import MySQLdb as mdb
 
-def esc( self, s: str ) -> str:
+def esc( s: str ) -> str:
     """Escape the string for use as a single-quoted value in an INSERT statement."""
     if isinstance( s, str ):
         return s.replace( "'", "\\'" )
