@@ -11,6 +11,7 @@
 
 import re
 import sys
+sys.path.append( '../lib' )
 
 import config
 import misc.SRU as SRU

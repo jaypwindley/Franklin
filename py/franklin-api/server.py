@@ -3,11 +3,11 @@
 from flask import Flask
 import sys
 
+sys.path.append( '../lib' );
 import license
 import config
 
 sys.path.append( './blueprints' )
-
 
 app = Flask( __name__ )
 

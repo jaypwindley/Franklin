@@ -1,6 +1,6 @@
 GENERAL
 
-The base URL is https://<server>:8112/api/<version>
+The base URL is https://<server>:1138/api/<version>
 where <server> is the name or IP address of the API server and <version> is the API version, currently 1.
 
 Authentication is Basic.

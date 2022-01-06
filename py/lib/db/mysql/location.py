@@ -15,3 +15,7 @@ from model.holdings import location
 class access_policy( IND.IND ):
     def __init__( self, conn_data ):
         super( access_policy, self ).__init__( location.access_policy().__class__, conn_data )
+
+class shelving_scheme( IND.IND ):
+    def __init__( self, conn_data ):
+        super( shelving_scheme, self ).__init__( location.shelving_scheme().__class__, conn_data )

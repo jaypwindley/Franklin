@@ -30,7 +30,8 @@ class shelving_scheme( IND ):
     location, such as by classification or for display.
 
     """
-    pass
+    def __init__( self, **kwargs ):
+        super( shelving_scheme, self ).__init__( **kwargs )
 
 
 class location( IND ):
@@ -86,7 +87,7 @@ class sublocation( IND ):
         return None
 
 
-class hhelving_location( IND ):
+class shelving_location( IND ):
     """Physical shelving of Item within its sublocation, such as a specific shelving unit or area within
     a single room."""
 
